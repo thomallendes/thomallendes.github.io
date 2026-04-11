@@ -297,7 +297,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(3, 97, 204, 0.315);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(12px);  /* soporte Safari */
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);

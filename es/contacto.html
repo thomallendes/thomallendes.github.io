@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO -->
+    <title>Contacto | TAM Computational Engineering</title>
+    <meta name="description" content="Simulación basada en física, optimización de procesos y análisis técnico para decisiones críticas. Ingeniería computacional con rigor y claridad.">
+    <meta name="keywords" content="simulación, ingeniería computacional, optimización, modelación, análisis técnico, fenómenos de transporte">
+    <meta name="author" content="TAM Computational Engineering SpA">
+    
+    <!-- Open Graph (para compartir en redes) -->
+    <meta property="og:title" content="TAM Computational Engineering">
+    <meta property="og:description" content="Ingeniería computacional para decisiones críticas.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/public/assets/og-image.png">
+    <meta property="og:url" content="https://www.tusitio.cl">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../public/assets/favicon.png">
+    
+    <!-- Tipografía -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Estilos globales -->
+    <link rel="stylesheet" href="../style.css">
+    
+    <!-- Color del navegador (móvil) -->
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+            }
+        });
+    }, { threshold: 0.2 });
+
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="index.html">
+                <img src="../images/logo_TAM.png" alt="Logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="proyectos.html">Proyectos</a>
+            <a href="sobremi.html">Sobre Mí</a>
+            <a href="contacto.html" class="active">Contacto</a>
+            <a href="../en/contact.html">EN</a>
+            <a href="../es/contacto.html">ES</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>Hablemos.</h1>
+        <p>Estamos aquí para ayudarte a tomar decisiones con claridad técnica.</p>
+    </section>
+
+    <!-- CONTACT INFO -->
+    <section class="contact-section fade-in">
+        <div class="contact-info">
+            <h2>Información de contacto</h2>
+
+            <p><strong>Ubicación:</strong> Santiago, Región Metropolitana, Chile</p>
+            <p><strong>Email:</strong> info@[tuempresa].cl</p>
+            <p><strong>Teléfono:</strong> +56 9 [tu número]</p>
+
+            <div class="contact-social">
+                <a href="#" aria-label="LinkedIn">
+                    <img src="../../public/assets/icons/linkedin.svg" alt="LinkedIn">
+                </a>
+                <a href="#" aria-label="Instagram">
+                    <img src="../../public/assets/icons/instagram.svg" alt="Instagram">
+                </a>
+                <a href="#" aria-label="Twitter">
+                    <img src="../../public/assets/icons/twitter.svg" alt="Twitter">
+                </a>
+            </div>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="contact-form fade-in">
+            <h2>Envíanos un mensaje</h2>
+
+            <form action="#" method="POST">
+                <label>Nombre</label>
+                <input type="text" name="nombre" required>
+
+                <label>Email</label>
+                <input type="email" name="email" required>
+
+                <label>Mensaje</label>
+                <textarea name="mensaje" rows="6" required></textarea>
+
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </section>
+
+
+
+
+
+
+    
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <!-- COLUMNA 1: LOGO + IDENTIDAD -->
+            <div class="footer-col">
+                <img src="../../public/assets/logo.png" alt="Logo" class="footer-logo">
+                <p class="footer-brand">TAM Computational Engineering</p>
+                <p class="footer-tagline">Ingeniería para decisiones críticas.</p>
+            </div>
+
+            <!-- COLUMNA 2: NAVEGACIÓN -->
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <a href="index.html">Inicio</a>
+                <a href="nosotros.html">Nosotros</a>
+                <a href="servicios/index.html">Servicios</a>
+                <a href="industrias/index.html">Industrias</a>
+                <a href="casos-exito/index.html">Casos de Éxito</a>
+                <a href="contacto.html">Contacto</a>
+            </div>
+
+            <!-- COLUMNA 3: CONTACTO + REDES -->
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <p>Santiago, Región Metropolitana, Chile</p>
+                <p>info@[tuempresa].cl</p>
+                <p>+56 9 [tu número]</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../../public/assets/icons/linkedin.svg" alt="LinkedIn">
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <img src="../../public/assets/icons/instagram.svg" alt="Instagram">
+                    </a>
+                    <a href="#" aria-label="Twitter">
+                        <img src="../../public/assets/icons/twitter.svg" alt="Twitter">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 TAM Computational Engineering</p>
+        </div>
+    </footer>
+
+</body>
+</html>

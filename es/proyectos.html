@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Casos de Éxito | TAM Computational Engineering</title>
+    <meta name="description" content="Proyectos reales donde la simulación, el análisis técnico y la optimización generaron impacto medible.">
+    <meta name="keywords" content="casos de éxito, simulación, CFD, DEM, FEA, ingeniería computacional, optimización, análisis técnico">
+    <meta name="author" content="TAM Computational Engineering SpA">
+
+    <link rel="icon" type="image/png" href="../../../public/assets/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../style.css">
+
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+    }, { threshold: 0.2 });
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="../index.html">
+                <img src="../images/logo_TAM.png" alt="Logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="proyectos.html"  class="active">Proyectos</a>
+            <a href="sobremi.html">Sobre Mí</a>
+            <a href="contacto.html">Contacto</a>
+            <a href="../en/projects.html">EN</a>
+            <a href="../es/proyectos.html">ES</a>
+        </nav>
+    </header>
+
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>Casos de Éxito</h1>
+        <p>Proyectos reales que muestran cómo combinamos rigor técnico y claridad ejecutiva.</p>
+    </section>
+
+    <section class="cases-tabs">
+        <button class="tab-button active" data-target="cae">CAE para Empresas</button>
+        <button class="tab-button" data-target="id">Investigación, Desarrollo e Innovación</button>
+    </section>
+
+    <section class="cases-content">
+
+        <!-- CAE PARA EMPRESAS -->
+        <div id="cae" class="cases-panel">
+            <div class="cases-list">
+                <a href="caso-1.html" class="case-item fade-in">
+                    <img src="../../../public/assets/casos-exito/caso1.jpg" alt="Caso 1">
+                    <div>
+                        <h3>Diseño de consola de alimentador</h3>
+                        <p>Gran minera de la Región de Valparaíso</p>
+                    </div>
+                </a>
+
+                <a href="caso-2.html" class="case-item fade-in">
+                    <img src="../../../public/assets/casos-exito/caso2.png" alt="Caso 2">
+                    <div>
+                        <h3>Optimización de chute y flujo de mineral</h3>
+                        <p>Operación minera de gran escala</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- INVESTIGACIÓN Y DESARROLLO -->
+        <div id="id" class="cases-panel">
+            <div class="cases-list">
+                <a href="casos-Idi/Idi-1.html" class="case-item fade-in">
+                    <img src="../../../public/assets/casos-exito/casos-Idi/idi1.jpg" alt="I+D+i 1">
+                    <div>
+                        <h3>Desarrollo de modelo multiphysics</h3>
+                        <p>Proyecto de investigación aplicada</p>
+                    </div>
+                </a>
+
+                <a href="Idi-2.html" class="case-item fade-in">
+                    <img src="../../../public/assets/casos-exito/idi2.jpg" alt="I+D+i 2">
+                    <div>
+                        <h3>Validación experimental y simulación acoplada</h3>
+                        <p>Centro de investigación</p>
+                    </div>
+                </a>
+
+                <a href="Idi-3.html" class="case-item fade-in">
+                    <img src="../../../public/assets/casos-exito/casos-Idi/idi3.jpg" alt="I+D+i 3">
+                    <div>
+                        <h3>Validación experimental y simulación acoplada</h3>
+                        <p>Centro de investigación</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+
+
+
+
+
+    
+    <!-- VALOR TRANSVERSAL -->
+    <section class="cases-value fade-in">
+        <h2>Qué demostramos en estos proyectos.</h2>
+        <ul>
+            <li>Reducción de incertidumbre en decisiones críticas.</li>
+            <li>Optimización de equipos y procesos de alto impacto.</li>
+            <li>Identificación temprana de fallas y zonas de riesgo.</li>
+            <li>Validación de diseños mediante modelos numéricos rigurosos.</li>
+            <li>Mejoras cuantitativas en confiabilidad y eficiencia.</li>
+        </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section fade-in">
+        <h2>¿Tienes un desafío técnico?</h2>
+        <p>Revisemos juntos cómo podemos ayudarte a resolverlo con claridad y rigor.</p>
+        <a href="../contacto.html" class="cta-button">Contactar</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-col">
+                <img src="../../../public/assets/logo.png" alt="Logo" class="footer-logo">
+                <p class="footer-brand">TAM Computational Engineering</p>
+                <p class="footer-tagline">Ingeniería para decisiones críticas.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <a href="../index.html">Inicio</a>
+                <a href="../nosotros.html">Nosotros</a>
+                <a href="../servicios/index.html">Servicios</a>
+                <a href="../industrias/index.html">Industrias</a>
+                <a href="../casos-exito/index.html">Casos de Éxito</a>
+                <a href="../contacto.html">Contacto</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <p>Santiago, Región Metropolitana, Chile</p>
+                <p>info@[tuempresa].cl</p>
+                <p>+56 9 [tu número]</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 TAM Computational Engineering</p>
+        </div>
+    </footer>
+
+</body>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll(".tab-button");
+    const panels = document.querySelectorAll(".cases-panel");
+
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+
+            // Cambiar estado visual del botón
+            buttons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            // Mostrar panel correspondiente
+            const target = btn.dataset.target;
+
+            panels.forEach(panel => {
+                if (panel.id === target) {
+                    panel.classList.add("open");
+                } else {
+                    panel.classList.remove("open");
+                }
+            });
+        });
+    });
+});
+</script>
+
+
+
+</html>
