@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PCM Thermal Storage Modeling | FreeFEM Documentation</title>
+    <meta name="description" content="Finite element documentation of PCM thermal storage modeling in FreeFEM, including formulation, implementation, numerical strategy, and results.">
+    <meta name="keywords" content="FreeFEM, PCM, phase change material, thermal storage, FEM, heat transfer, numerical modeling, computational engineering">
+    <meta name="author" content="Thomas Allendes">
+
+    <meta property="og:title" content="PCM Thermal Storage Modeling | FreeFEM Documentation">
+    <meta property="og:description" content="Finite element documentation of PCM thermal storage modeling in FreeFEM.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/freefem/pcm-thermal-storage.html">
+
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../style.css">
+
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+    }, { threshold: 0.15 });
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="../index.html">
+                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../projects.html" class="active">Projects</a>
+            <a href="../about.html">About Me</a>
+            <a href="../contact.html">Contact</a>
+            <a href="../../en/freefem/pcm-thermal-storage.html">EN</a>
+            <a href="../../es/freefem/pcm-thermal-storage.html">ES</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>PCM Thermal Storage Modeling</h1>
+        <p>
+            Finite element documentation of transient heat transfer and phase change behavior
+            in thermal energy storage systems using FreeFEM.
+        </p>
+    </section>
+
+    <!-- DOC LAYOUT -->
+    <section class="projects-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="projects-sidebar fade-in">
+            <h3>Contents</h3>
+            <nav class="projects-toc">
+                <a href="#overview">Overview</a>
+                <a href="#engineering-context">Engineering Context</a>
+                <a href="#problem-definition">Problem Definition</a>
+                <a href="#geometry-domains">Geometry and Domains</a>
+                <a href="#governing-model">Governing Model</a>
+                <a href="#numerical-implementation">Numerical Implementation</a>
+                <a href="#boundary-conditions">Boundary Conditions</a>
+                <a href="#results-discussion">Results and Discussion</a>
+                <a href="#validation">Validation and Consistency</a>
+                <a href="#code-structure">Code Structure</a>
+                <a href="#conclusions">Conclusions</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="projects-content">
+
+            <section id="overview" class="projects-section fade-in">
+                <h2>Overview</h2>
+                <p>
+                    This page documents a FreeFEM model developed to study thermal storage using
+                    phase change materials (PCM). The focus is on representing transient heat transfer,
+                    latent heat effects, and the evolution of the thermal response under realistic conditions.
+                </p>
+                <p>
+                    The case is presented not only as a set of simulation results, but as a structured
+                    numerical workflow including formulation, implementation, assumptions, and interpretation.
+                </p>
+            </section>
+
+            <section id="engineering-context" class="projects-section fade-in">
+                <h2>Engineering Context</h2>
+                <p>
+                    Phase change materials are relevant for thermal regulation and energy storage because
+                    they can absorb and release significant amounts of energy during melting and solidification.
+                    In practical systems, the main engineering challenge is to understand how geometry,
+                    thermal boundary conditions, and material properties affect storage performance.
+                </p>
+                <p>
+                    In this case, the objective is to characterize the transient thermal behavior of a PCM-based
+                    storage configuration and identify the mechanisms that govern heat accumulation and phase change.
+                </p>
+            </section>
+
+            <section id="problem-definition" class="projects-section fade-in">
+                <h2>Problem Definition</h2>
+                <p>
+                    The model considers a transient heat transfer problem in a system composed of a PCM region
+                    and solid conductive components. The main quantities of interest include:
+                </p>
+                <ul>
+                    <li>Temperature evolution in time</li>
+                    <li>Stored thermal energy</li>
+                    <li>Heat accumulation rate</li>
+                    <li>Influence of geometric or operating parameters</li>
+                </ul>
+                <p>
+                    The problem may be extended to compare multiple configurations, such as changes in the number
+                    of fins, tube arrangement, or boundary-condition intensity.
+                </p>
+            </section>
+
+            <section id="geometry-domains" class="projects-section fade-in">
+                <h2>Geometry and Domains</h2>
+                <p>
+                    The computational domain is divided into at least two main regions:
+                </p>
+                <ul>
+                    <li><strong>PCM domain:</strong> region where phase change and thermal storage occur</li>
+                    <li><strong>Solid domain:</strong> tube walls, fins, or conductive support regions</li>
+                </ul>
+                <p>
+                    Interface treatment between these regions is an important part of the model, since the thermal
+                    exchange across the common boundary strongly influences the transient response.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="../../images/project-freefem-pcm-geometry.jpg" alt="PCM geometry and computational domains">
+                    <figcaption>
+                        Example geometry and domain decomposition for the PCM thermal storage model.
+                    </figcaption>
+                </figure>
+            </section>
+
+            <section id="governing-model" class="projects-section fade-in">
+                <h2>Governing Model</h2>
+                <p>
+                    The problem is modeled through transient heat conduction with phase change effects.
+                    Depending on the final implementation, the latent heat contribution may be introduced
+                    through an apparent heat capacity approach, an enthalpy formulation, or an equivalent
+                    nonlinear representation.
+                </p>
+                <p>
+                    At this stage, this section can be extended with:
+                </p>
+                <ul>
+                    <li>Strong form of the governing equations</li>
+                    <li>Variational formulation</li>
+                    <li>Definition of unknowns and material properties</li>
+                    <li>Treatment of latent heat and nonlinearities</li>
+                </ul>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Suggested extension:</strong> later you can insert your mathematical formulation
+                        here using equations rendered as images or with MathJax if you decide to add it.
+                    </p>
+                </div>
+            </section>
+
+            <section id="numerical-implementation" class="projects-section fade-in">
+                <h2>Numerical Implementation</h2>
+                <p>
+                    The model is implemented in FreeFEM using a finite element discretization for the thermal field.
+                    Depending on the case, the numerical strategy may include:
+                </p>
+                <ul>
+                    <li>Transient time stepping</li>
+                    <li>Nonlinear iteration procedure</li>
+                    <li>Adaptive mesh refinement</li>
+                    <li>Separate treatment of PCM and solid subdomains</li>
+                </ul>
+                <p>
+                    This section is intended to describe the actual implementation choices made in the script,
+                    including how the mesh is defined, how the problem is assembled, and how outputs are computed.
+                </p>
+            </section>
+
+            <section id="boundary-conditions" class="projects-section fade-in">
+                <h2>Boundary Conditions</h2>
+                <p>
+                    The thermal response depends strongly on the imposed boundary conditions. These may include:
+                </p>
+                <ul>
+                    <li>Prescribed temperature boundaries</li>
+                    <li>Convective boundaries</li>
+                    <li>Time-dependent external forcing</li>
+                    <li>Symmetry or insulated boundaries</li>
+                </ul>
+                <p>
+                    If the case is linked to a solar-energy application, this section can later include
+                    time-varying ambient temperature, irradiation effects, and wind-dependent heat transfer.
+                </p>
+            </section>
+
+            <section id="results-discussion" class="projects-section fade-in">
+                <h2>Results and Discussion</h2>
+                <p>
+                    This section should gather the main outputs of the model and interpret them from an engineering
+                    perspective. Typical results may include temperature fields, temporal evolution of stored energy,
+                    and comparisons between configurations.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="../../images/project-freefem-pcm-results.jpg" alt="PCM thermal storage results">
+                    <figcaption>
+                        Example placeholder for temperature evolution, stored heat, or accumulation rate results.
+                    </figcaption>
+                </figure>
+
+                <p>
+                    Beyond visualizing the results, the goal is to discuss what they reveal about the governing
+                    thermal mechanisms, the role of geometry, and the numerical behavior of the model.
+                </p>
+            </section>
+
+            <section id="validation" class="projects-section fade-in">
+                <h2>Validation and Consistency</h2>
+                <p>
+                    A documented numerical model should also show how consistency was checked. Depending on the stage
+                    of development, this can include:
+                </p>
+                <ul>
+                    <li>Energy balance verification</li>
+                    <li>Mesh sensitivity analysis</li>
+                    <li>Time-step sensitivity</li>
+                    <li>Comparison against expected physical trends</li>
+                    <li>Comparison with literature or reference cases</li>
+                </ul>
+                <p>
+                    This section is useful to explain what aspects were validated directly and what limitations remain.
+                </p>
+            </section>
+
+            <section id="code-structure" class="projects-section fade-in">
+                <h2>Code Structure</h2>
+                <p>
+                    This part can be used to explain how the FreeFEM script is organized. For example:
+                </p>
+                <ul>
+                    <li>Parameter definition</li>
+                    <li>Mesh generation</li>
+                    <li>Finite element spaces</li>
+                    <li>Variational problem definition</li>
+                    <li>Time loop</li>
+                    <li>Post-processing and exported quantities</li>
+                </ul>
+
+                <pre><code>// Example structure
+// 1. Parameters
+// 2. Mesh and borders
+// 3. FE spaces
+// 4. Material properties
+// 5. Variational formulation
+// 6. Time integration loop
+// 7. Output of temperature and stored energy
+                </code></pre>
+            </section>
+
+            <section id="conclusions" class="projects-section fade-in">
+                <h2>Conclusions</h2>
+                <p>
+                    This case provides a structured basis for documenting PCM thermal storage models in FreeFEM.
+                    As the page evolves, it can incorporate more detailed formulation, code excerpts,
+                    numerical comparisons, and engineering conclusions.
+                </p>
+                <p>
+                    The final purpose is to make the project readable both as a technical case study
+                    and as a transparent record of modeling decisions.
+                </p>
+            </section>
+
+        </main>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section fade-in">
+        <h2>Interested in this case?</h2>
+        <p>You can return to the FreeFEM documentation index or get in touch through the contact page.</p>
+        <a href="../contact.html" class="cta-button">Contact</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-col">
+                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
+                <p class="footer-brand">Allendes Computational Engineering</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="../index.html">Home</a>
+                <a href="../projects.html">Projects</a>
+                <a href="../about.html">About Me</a>
+                <a href="../contact.html">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Santiago, Chile</p>
+                <p>your.email@example.com</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../../images/linkedin.svg" alt="LinkedIn">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Allendes Computational Engineering</p>
+        </div>
+    </footer>
+
+</body>
+</html>

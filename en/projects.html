@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Success Cases | Allendes Computational Engineering</title>
-    <meta name="description" content="Proyectos reales donde la simulación, el análisis técnico y la optimización generaron impacto medible.">
-    <meta name="keywords" content="casos de éxito, simulación, CFD, DEM, FEA, ingeniería computacional, optimización, análisis técnico">
-    <meta name="author" content="Allendes Computational Engineering SpA">
+    <title>Projects | Allendes Computational Engineering</title>
+    <meta name="description" content="Selected projects in CFD, FEM, heat transfer, and physics-based modeling, including featured projects and documented technical work in OpenFOAM and FreeFEM.">
+    <meta name="keywords" content="projects, CFD, FEM, OpenFOAM, FreeFEM, heat transfer, multiphysics, engineering simulation, computational engineering">
+    <meta name="author" content="Thomas Allendes">
 
-    <link rel="icon" type="image/png" href="../../../public/assets/favicon.png">
+    <meta property="og:title" content="Projects | Allendes Computational Engineering">
+    <meta property="og:description" content="Featured projects and documented technical work in OpenFOAM and FreeFEM.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/projects.html">
+
+    <link rel="icon" type="image/png" href="../images/favicon.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add("visible");
         });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.15 });
     elements.forEach(el => observer.observe(el));
 });
 </script>
@@ -37,14 +43,14 @@ document.addEventListener("DOMContentLoaded", () => {
     <!-- NAV -->
     <header class="nav">
         <div class="nav-logo">
-            <a href="../index.html">
-                <img src="../images/logo_TAM.png" alt="Logo" class="logo-img">
+            <a href="index.html">
+                <img src="../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
             </a>
         </div>
 
         <nav class="nav-links">
             <a href="index.html">Home</a>
-            <a href="projects.html"  class="active">Projects</a>
+            <a href="projects.html" class="active">Projects</a>
             <a href="about.html">About Me</a>
             <a href="contact.html">Contact</a>
             <a href="../en/projects.html">EN</a>
@@ -52,95 +58,207 @@ document.addEventListener("DOMContentLoaded", () => {
         </nav>
     </header>
 
-
     <!-- HERO -->
     <section class="hero hero-small fade-in">
-        <h1>Success Cases</h1>
-        <p>Proyectos reales que muestran cómo combinamos rigor técnico y claridad ejecutiva.</p>
+        <h1>Projects</h1>
+        <p>
+            Selected work in computational engineering, including featured projects and documented technical work
+            in OpenFOAM and FreeFEM.
+        </p>
     </section>
 
-    <section class="cases-tabs">
-        <button class="tab-button active" data-target="cae">CAE para Empresas</button>
-        <button class="tab-button" data-target="id">Investigación, Desarrollo e Innovación</button>
-    </section>
+    <!-- PROJECTS LAYOUT -->
+    <section class="projects-layout">
 
-    <section class="cases-content">
+        <!-- SIDEBAR -->
+        <aside class="projects-sidebar fade-in">
+            <h3>Contents</h3>
+            <nav class="projects-toc">
+                <a href="#introduction">Introduction</a>
+                <a href="#featured-projects">Featured Projects</a>
+                <a href="#openfoam-documentation">OpenFOAM Documentation</a>
+                <a href="#freefem-documentation">FreeFEM Documentation</a>
+            </nav>
+        </aside>
 
-        <!-- CAE PARA EMPRESAS -->
-        <div id="cae" class="cases-panel">
-            <div class="cases-list">
-                <a href="caso-1.html" class="case-item fade-in">
-                    <img src="../../../public/assets/casos-exito/caso1.jpg" alt="Caso 1">
-                    <div>
-                        <h3>Diseño de consola de alimentador</h3>
-                        <p>Gran minera de la Región de Valparaíso</p>
+        <!-- MAIN CONTENT -->
+        <main class="projects-content">
+
+            <!-- INTRODUCTION -->
+            <section id="introduction" class="projects-section fade-in">
+                <h2>Introduction</h2>
+                <p>
+                    This page brings together different layers of my work in computational engineering.
+                    Some projects are presented as featured case studies, offering a concise view of the
+                    problem, modeling approach, and engineering relevance.
+                </p>
+                <p>
+                    Other projects are documented in greater technical depth. In particular, OpenFOAM and FreeFEM
+                    are used not only to show results, but also to present modeling decisions, numerical setup,
+                    assumptions, code structure, validation, and interpretation.
+                </p>
+            </section>
+
+            <!-- FEATURED PROJECTS -->
+            <section id="featured-projects" class="projects-section fade-in">
+                <h2>Featured Projects</h2>
+                <p>
+                    Selected projects that best represent my approach to engineering analysis:
+                    identifying the governing physics, building appropriate models, and translating results
+                    into useful technical insight.
+                </p>
+
+                <article class="project-entry fade-in">
+                    <img src="../images/project-kiln-placeholder.jpg" alt="Rotary kiln damper optimization preview">
+                    <div class="project-entry-content">
+                        <h3>Rotary Kiln Damper Optimization</h3>
+                        <p class="project-subtitle">Industrial CFD analysis of high-temperature gas-air mixing and downstream thermal control</p>
+
+                        <p>
+                            <strong>Context:</strong> Industrial gas treatment system operating under high-temperature conditions,
+                            where passive air suction was used to modify pressure and temperature downstream.
+                        </p>
+                        <p>
+                            <strong>Approach:</strong> CFD modeling of gas-air mixing, species transport, ideal gas behavior,
+                            and temperature-dependent properties.
+                        </p>
+                        <p>
+                            <strong>Value:</strong> Evaluation of flow behavior and operating feasibility in a system where
+                            thermal control and physical consistency were critical.
+                        </p>
+
+                        <a href="project-kiln.html" class="project-link">Read Project →</a>
                     </div>
-                </a>
+                </article>
 
-                <a href="caso-2.html" class="case-item fade-in">
-                    <img src="../../../public/assets/casos-exito/caso2.png" alt="Caso 2">
-                    <div>
-                        <h3>Optimización de chute y flujo de mineral</h3>
-                        <p>Operación minera de gran escala</p>
+                <article class="project-entry fade-in">
+                    <img src="../images/project-pcm-placeholder.jpg" alt="PCM thermal storage modeling preview">
+                    <div class="project-entry-content">
+                        <h3>PCM Thermal Storage Modeling</h3>
+                        <p class="project-subtitle">Finite element study of phase change materials in thermal energy systems</p>
+
+                        <p>
+                            <strong>Context:</strong> Thermal modeling of phase change materials for systems where transient heat
+                            transfer and energy storage behavior are central.
+                        </p>
+                        <p>
+                            <strong>Approach:</strong> Finite element formulation with nonlinear solution methods
+                            and adaptive meshing strategies.
+                        </p>
+                        <p>
+                            <strong>Value:</strong> Better understanding of thermal behavior, phase change dynamics,
+                            and computational efficiency.
+                        </p>
+
+                        <a href="project-pcm.html" class="project-link">Read Project →</a>
                     </div>
-                </a>
-            </div>
-        </div>
+                </article>
 
-        <!-- INVESTIGACIÓN Y DESARROLLO -->
-        <div id="id" class="cases-panel">
-            <div class="cases-list">
-                <a href="casos-Idi/Idi-1.html" class="case-item fade-in">
-                    <img src="../../../public/assets/casos-exito/casos-Idi/idi1.jpg" alt="I+D+i 1">
-                    <div>
-                        <h3>Desarrollo de modelo multiphysics</h3>
-                        <p>Proyecto de investigación aplicada</p>
+                <article class="project-entry fade-in">
+                    <img src="../images/project-hydraulic-placeholder.jpg" alt="Hydraulic flow distribution preview">
+                    <div class="project-entry-content">
+                        <h3>Hydraulic Flow and Distribution Analysis</h3>
+                        <p class="project-subtitle">Applied modeling of flow behavior in hydraulic and industrial systems</p>
+
+                        <p>
+                            <strong>Context:</strong> Engineering analysis of flow distribution, discharge conditions,
+                            and hydraulic feasibility under realistic operating conditions.
+                        </p>
+                        <p>
+                            <strong>Approach:</strong> Numerical modeling focused on system behavior, boundary conditions,
+                            and practical engineering performance.
+                        </p>
+                        <p>
+                            <strong>Value:</strong> Support for design evaluation and better understanding of system-level flow behavior.
+                        </p>
+
+                        <a href="project-hydraulic.html" class="project-link">Read Project →</a>
                     </div>
-                </a>
+                </article>
+            </section>
 
-                <a href="Idi-2.html" class="case-item fade-in">
-                    <img src="../../../public/assets/casos-exito/idi2.jpg" alt="I+D+i 2">
-                    <div>
-                        <h3>Validación experimental y simulación acoplada</h3>
-                        <p>Centro de investigación</p>
+            <!-- OPENFOAM DOCUMENTATION -->
+            <section id="openfoam-documentation" class="projects-section fade-in">
+                <h2>OpenFOAM Documentation</h2>
+                <p>
+                    This section gathers CFD projects documented with greater technical depth.
+                    In addition to final results, the documentation is intended to show geometry preparation,
+                    meshing strategy, boundary conditions, model selection, assumptions, validation,
+                    and engineering interpretation.
+                </p>
+                <p>
+                    The goal is not only to present simulations, but to expose the numerical workflow
+                    and the reasoning behind the modeling decisions.
+                </p>
+
+                <article class="project-entry fade-in">
+                    <img src="../images/project-openfoam-damper.jpg" alt="OpenFOAM documentation preview">
+                    <div class="project-entry-content">
+                        <h3>OpenFOAM Technical Documentation</h3>
+                        <p class="project-subtitle">
+                            Documented CFD work including meshing, setup, assumptions,
+                            results, validation, and engineering discussion
+                        </p>
+
+                        <p>
+                            This documentation space includes industrial and applied CFD cases developed in OpenFOAM,
+                            with emphasis on transparent modeling workflows and physically meaningful interpretation.
+                        </p>
+                        <p>
+                            Each page is intended to present the engineering context, numerical setup,
+                            assumptions, results, and discussion in a structured way.
+                        </p>
+
+                        <a href="openfoam/index.html" class="project-link">Open OpenFOAM Documentation →</a>
                     </div>
-                </a>
+                </article>
+            </section>
 
-                <a href="Idi-3.html" class="case-item fade-in">
-                    <img src="../../../public/assets/casos-exito/casos-Idi/idi3.jpg" alt="I+D+i 3">
-                    <div>
-                        <h3>Validación experimental y simulación acoplada</h3>
-                        <p>Centro de investigación</p>
+
+            <!-- FREEFEM DOCUMENTATION -->
+            <section id="freefem-documentation" class="projects-section fade-in">
+                <h2>FreeFEM Documentation</h2>
+                <p>
+                    This section gathers finite element projects documented in greater numerical depth.
+                    In addition to results, the documentation is intended to show formulation, implementation,
+                    treatment of domains and interfaces, validation, and code structure.
+                </p>
+                <p>
+                    The goal is not only to present final outputs, but to expose the reasoning behind the model
+                    and the numerical workflow used to study the problem.
+                </p>
+
+                <article class="project-entry fade-in">
+                    <img src="../images/project-freefem-pcm.jpg" alt="FreeFEM documentation preview">
+                    <div class="project-entry-content">
+                        <h3>FreeFEM Technical Documentation</h3>
+                        <p class="project-subtitle">
+                            Documented finite element work including formulation, implementation,
+                            validation, and code-oriented discussion
+                        </p>
+
+                        <p>
+                            This documentation space includes case studies in heat transfer, phase change,
+                            interface treatment, and other finite element problems developed in FreeFEM.
+                        </p>
+                        <p>
+                            Each page is intended to present the engineering context, mathematical formulation,
+                            numerical strategy, results, and discussion in a structured way.
+                        </p>
+
+                        <a href="freefem/index.html" class="project-link">Open FreeFEM Documentation →</a>
                     </div>
-                </a>
-            </div>
-        </div>
+                </article>
+            </section>
 
-    </section>
-
-
-
-
-
-
-    
-    <!-- VALOR TRANSVERSAL -->
-    <section class="cases-value fade-in">
-        <h2>Qué demostramos en estos proyectos.</h2>
-        <ul>
-            <li>Reducción de incertidumbre en decisiones críticas.</li>
-            <li>Optimización de equipos y procesos de alto impacto.</li>
-            <li>Identificación temprana de fallas y zonas de riesgo.</li>
-            <li>Validación de diseños mediante modelos numéricos rigurosos.</li>
-            <li>Mejoras cuantitativas en confiabilidad y eficiencia.</li>
-        </ul>
+        </main>
     </section>
 
     <!-- CTA -->
     <section class="cta-section fade-in">
-        <h2>¿Tienes un desafío técnico?</h2>
-        <p>Revisemos juntos cómo podemos ayudarte a resolverlo con claridad y rigor.</p>
-        <a href="../contacto.html" class="cta-button">Contactar</a>
+        <h2>Interested in my work?</h2>
+        <p>You can explore a project in more detail or get in touch through the contact page.</p>
+        <a href="contact.html" class="cta-button">Contact</a>
     </section>
 
     <!-- FOOTER -->
@@ -148,13 +266,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="footer-content">
 
             <div class="footer-col">
-                <img src="../images/logo_TAM.png" alt="Logo" class="footer-logo">
-                <p class="footer-brand">TAM Computational Engineering</p>
-                <p class="footer-tagline">Ingeniería para decisiones críticas.</p>
+                <img src="../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
+                <p class="footer-brand">Allendes Computational Engineering</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
             </div>
 
             <div class="footer-col">
-                <h4>Navegación</h4>
+                <h4>Navigation</h4>
                 <a href="index.html">Home</a>
                 <a href="projects.html">Projects</a>
                 <a href="about.html">About Me</a>
@@ -164,8 +282,13 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="footer-col">
                 <h4>Contact</h4>
                 <p>Santiago, Chile</p>
-                <p>info@[tuempresa].cl</p>
-                <p>+56 9 [tu número]</p>
+                <p>your.email@example.com</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../images/linkedin.svg" alt="LinkedIn">
+                    </a>
+                </div>
             </div>
 
         </div>
@@ -176,35 +299,4 @@ document.addEventListener("DOMContentLoaded", () => {
     </footer>
 
 </body>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const buttons = document.querySelectorAll(".tab-button");
-    const panels = document.querySelectorAll(".cases-panel");
-
-    buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
-
-            // Cambiar estado visual del botón
-            buttons.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-
-            // Mostrar panel correspondiente
-            const target = btn.dataset.target;
-
-            panels.forEach(panel => {
-                if (panel.id === target) {
-                    panel.classList.add("open");
-                } else {
-                    panel.classList.remove("open");
-                }
-            });
-        });
-    });
-});
-</script>
-
-
-
 </html>

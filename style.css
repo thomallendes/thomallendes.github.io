@@ -35,11 +35,12 @@ body {
     z-index: 1000;
 }
 
+
 .nav-logo img {
-    height: 48px;
+    height: 64px;
     width: auto;
     display: block;
-    opacity: 0.95;
+    opacity: 1.0;
     transition: opacity 0.2s ease;
 }
 
@@ -93,6 +94,10 @@ body {
     text-align: center;
     max-width: 1100px;
     margin: 0 auto;
+}
+
+.hero-small {
+    padding: 120px 40px 80px;
 }
 
 .hero h1 {
@@ -285,7 +290,7 @@ body {
 }
 
 /* =========================
-   ABOUT PREVIEW
+   ABOUT PREVIEW / SHARED GRID
 ========================= */
 .why-us {
     max-width: 1200px;
@@ -333,6 +338,158 @@ body {
 }
 
 /* =========================
+   ABOUT PAGE
+========================= */
+.about-intro {
+    max-width: 900px;
+    margin: 100px auto;
+    padding: 0 40px;
+    text-align: center;
+}
+
+.about-intro h2 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.about-intro p {
+    font-size: 20px;
+    color: #444;
+    line-height: 1.7;
+    max-width: 760px;
+    margin: 0 auto 20px;
+}
+
+.about-intro p:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================
+   PROJECTS PAGE
+========================= */
+.projects-layout {
+    max-width: 1400px;
+    margin: 0 auto 120px;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 60px;
+    align-items: start;
+}
+
+.projects-sidebar {
+    position: sticky;
+    top: 110px;
+    align-self: start;
+}
+
+.projects-sidebar h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.projects-toc {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.projects-toc a {
+    text-decoration: none;
+    color: #111;
+    font-size: 16px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.projects-toc a:hover {
+    opacity: 1;
+    transform: translateX(2px);
+}
+
+.projects-content {
+    min-width: 0;
+}
+
+.projects-section {
+    margin-bottom: 100px;
+    scroll-margin-top: 120px;
+}
+
+.projects-section h2 {
+    font-size: 40px;
+    margin-bottom: 24px;
+}
+
+.projects-section p {
+    font-size: 19px;
+    color: #444;
+    line-height: 1.75;
+    margin-bottom: 18px;
+    max-width: 900px;
+}
+
+.project-entry {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px;
+    margin-top: 36px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.project-entry:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.08);
+}
+
+.project-entry img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+}
+
+.project-entry-content h3 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    line-height: 1.25;
+}
+
+.project-subtitle {
+    font-size: 17px;
+    color: #666;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+.project-entry-content p {
+    font-size: 17px;
+    color: #444;
+    line-height: 1.7;
+    margin-bottom: 14px;
+    max-width: none;
+}
+
+.project-link {
+    display: inline-block;
+    margin-top: 8px;
+    text-decoration: none;
+    color: #111;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+.project-link:hover {
+    opacity: 0.6;
+}
+
+/* =========================
    CTA
 ========================= */
 .cta-section {
@@ -355,6 +512,108 @@ body {
     color: #444;
     margin-bottom: 32px;
     line-height: 1.6;
+}
+
+/* =========================
+   CONTACT PAGE
+========================= */
+.contact-section {
+    max-width: 1100px;
+    margin: 80px auto 120px;
+    padding: 0 40px;
+    display: flex;
+    gap: 80px;
+    flex-wrap: wrap;
+}
+
+.contact-info {
+    flex: 1;
+    min-width: 280px;
+}
+
+.contact-info h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.contact-info p {
+    font-size: 18px;
+    color: #444;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.contact-social {
+    display: flex;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.contact-social img {
+    height: 26px;
+    width: 26px;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+}
+
+.contact-social img:hover {
+    opacity: 0.5;
+}
+
+.contact-form {
+    flex: 1;
+    min-width: 320px;
+}
+
+.contact-form h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.contact-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contact-form label {
+    font-size: 16px;
+    color: #333;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 14px;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: inherit;
+    background: #fff;
+    transition: border 0.2s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #111;
+}
+
+.contact-form button {
+    margin-top: 10px;
+    padding: 14px 20px;
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.contact-form button:hover {
+    opacity: 0.8;
+    transform: translateY(-1px);
 }
 
 /* =========================
@@ -471,6 +730,24 @@ body {
 /* =========================
    RESPONSIVE
 ========================= */
+@media (max-width: 1100px) {
+    .projects-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .projects-sidebar {
+        position: static;
+        top: auto;
+    }
+
+    .projects-toc {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+    }
+}
+
 @media (max-width: 900px) {
     .nav {
         flex-direction: column;
@@ -490,15 +767,23 @@ body {
         padding: 120px 24px 80px;
     }
 
+    .hero-small {
+        padding: 100px 24px 60px;
+    }
+
     .hero h1 {
         font-size: 40px;
     }
 
     .hero p,
     .home-intro p,
+    .about-intro p,
+    .projects-section p,
+    .project-entry-content p,
     .service-card p,
     .why-item p,
-    .cta-section p {
+    .cta-section p,
+    .contact-info p {
         font-size: 18px;
     }
 
@@ -506,9 +791,17 @@ body {
     .home-cases,
     .home-services,
     .why-us,
-    .cta-section {
+    .about-intro,
+    .projects-layout,
+    .cta-section,
+    .contact-section {
         padding-left: 24px;
         padding-right: 24px;
+    }
+
+    .about-intro h2,
+    .projects-section h2 {
+        font-size: 34px;
     }
 
     .case-item {
@@ -519,6 +812,15 @@ body {
     .case-item img {
         width: 100%;
         height: 200px;
+    }
+
+    .project-entry {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-section {
+        flex-direction: column;
+        gap: 40px;
     }
 
     .footer {

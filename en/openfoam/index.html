@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OpenFOAM Documentation | Allendes Computational Engineering</title>
+    <meta name="description" content="Documented CFD work in OpenFOAM, including geometry preparation, meshing, numerical setup, validation, and engineering interpretation.">
+    <meta name="keywords" content="OpenFOAM, CFD, computational fluid dynamics, meshing, turbulence modeling, engineering simulation, computational engineering">
+    <meta name="author" content="Thomas Allendes">
+
+    <meta property="og:title" content="OpenFOAM Documentation | Allendes Computational Engineering">
+    <meta property="og:description" content="Documented CFD work in OpenFOAM, including meshing, setup, assumptions, validation, and engineering interpretation.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/openfoam/index.html">
+
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../style.css">
+
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+    }, { threshold: 0.15 });
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="../index.html">
+                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../projects.html" class="active">Projects</a>
+            <a href="../about.html">About Me</a>
+            <a href="../contact.html">Contact</a>
+            <a href="../../en/openfoam/index.html">EN</a>
+            <a href="../../es/openfoam/index.html">ES</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>OpenFOAM Documentation</h1>
+        <p>
+            Documented CFD work including geometry preparation, meshing,
+            numerical setup, validation, and engineering interpretation.
+        </p>
+    </section>
+
+    <!-- DOC LAYOUT -->
+    <section class="projects-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="projects-sidebar fade-in">
+            <h3>Contents</h3>
+            <nav class="projects-toc">
+                <a href="#introduction">Introduction</a>
+                <a href="#getting-started">Getting Started</a>
+                <a href="#rotary-kiln-damper">Rotary Kiln Damper</a>
+                <a href="#hydraulic-system-analysis">Hydraulic System Analysis</a>
+                <a href="#future-cases">Future Cases</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="projects-content">
+
+            <section id="introduction" class="projects-section fade-in">
+                <h2>Introduction</h2>
+                <p>
+                    This section gathers CFD projects developed in OpenFOAM and documented
+                    with greater technical depth.
+                </p>
+                <p>
+                    The purpose is not only to present simulation results, but also to show the workflow behind them:
+                    geometry preparation, meshing strategy, boundary conditions, solver setup, turbulence modeling,
+                    assumptions, validation checks, and interpretation of results.
+                </p>
+            </section>
+
+            <section id="getting-started" class="projects-section fade-in">
+                <h2>Getting Started</h2>
+
+                <article class="project-entry fade-in">
+                    <img src="../../images/project-openfoam-getting-started.jpg" alt="OpenFOAM getting started preview">
+                    <div class="project-entry-content">
+                        <h3>Getting Started with OpenFOAM Cases</h3>
+                        <p class="project-subtitle">
+                            Notes on case structure, workflow, meshing, and how the documented cases are organized
+                        </p>
+
+                        <p>
+                            This page introduces the way OpenFOAM projects are documented in this portfolio,
+                            including geometry preparation, mesh generation, setup strategy, assumptions, and post-processing.
+                        </p>
+
+                        <a href="getting-started.html" class="project-link">Open Page →</a>
+                    </div>
+                </article>
+            </section>
+
+            <section id="rotary-kiln-damper" class="projects-section fade-in">
+                <h2>Rotary Kiln Damper</h2>
+
+                <article class="project-entry fade-in">
+                    <img src="../../images/project-openfoam-damper.jpg" alt="Rotary kiln damper documentation preview">
+                    <div class="project-entry-content">
+                        <h3>Rotary Kiln Damper Optimization</h3>
+                        <p class="project-subtitle">
+                            Industrial CFD case involving high-temperature gas-air mixing and downstream thermal control
+                        </p>
+
+                        <p>
+                            This case documents a CFD study of an industrial gas treatment system where passive air suction
+                            was used to modify downstream pressure and temperature conditions.
+                        </p>
+                        <p>
+                            The documentation is intended to cover geometry and mesh workflow, species transport setup,
+                            turbulence model selection, thermophysical assumptions, results, and engineering interpretation.
+                        </p>
+
+                        <a href="rotary-kiln-damper.html" class="project-link">Open Page →</a>
+                    </div>
+                </article>
+            </section>
+
+            <section id="hydraulic-system-analysis" class="projects-section fade-in">
+                <h2>Hydraulic System Analysis</h2>
+
+                <article class="project-entry fade-in">
+                    <img src="../../images/project-openfoam-hydraulic.jpg" alt="Hydraulic system analysis preview">
+                    <div class="project-entry-content">
+                        <h3>Hydraulic Flow and Distribution Analysis</h3>
+                        <p class="project-subtitle">
+                            Applied CFD work focused on flow behavior, system feasibility, and engineering interpretation
+                        </p>
+
+                        <p>
+                            This case focuses on CFD analysis of hydraulic behavior in applied engineering systems,
+                            with emphasis on operating conditions, system response, and practical interpretation of results.
+                        </p>
+                        <p>
+                            The documentation is intended to present the numerical setup, simplifications,
+                            flow interpretation, and limitations relevant to engineering use.
+                        </p>
+
+                        <a href="hydraulic-system-analysis.html" class="project-link">Open Page →</a>
+                    </div>
+                </article>
+            </section>
+
+            <section id="future-cases" class="projects-section fade-in">
+                <h2>Future Cases</h2>
+                <p>
+                    This documentation space will gradually include additional OpenFOAM work such as
+                    multiphase flows, species transport cases, thermal-fluid problems, and other industrial CFD studies.
+                </p>
+            </section>
+
+        </main>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section fade-in">
+        <h2>Interested in this work?</h2>
+        <p>You can return to the Projects page or get in touch through the contact page.</p>
+        <a href="../contact.html" class="cta-button">Contact</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-col">
+                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
+                <p class="footer-brand">Allendes Computational Engineering</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="../index.html">Home</a>
+                <a href="../projects.html">Projects</a>
+                <a href="../about.html">About Me</a>
+                <a href="../contact.html">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Santiago, Chile</p>
+                <p>your.email@example.com</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../../images/linkedin.svg" alt="LinkedIn">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Allendes Computational Engineering</p>
+        </div>
+    </footer>
+
+</body>
+</html>

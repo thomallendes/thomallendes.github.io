@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FreeFEM Documentation | Allendes Computational Engineering</title>
+    <meta name="description" content="Documented finite element work in FreeFEM, including formulation, implementation, validation, and engineering interpretation.">
+    <meta name="keywords" content="FreeFEM, finite element method, FEM, heat transfer, phase change, numerical modeling, computational engineering">
+    <meta name="author" content="Thomas Allendes">
+
+    <meta property="og:title" content="FreeFEM Documentation | Allendes Computational Engineering">
+    <meta property="og:description" content="Documented finite element work in FreeFEM, including formulation, implementation, validation, and engineering interpretation.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/freefem/index.html">
+
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../style.css">
+
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+    }, { threshold: 0.15 });
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="../index.html">
+                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../projects.html" class="active">Projects</a>
+            <a href="../about.html">About Me</a>
+            <a href="../contact.html">Contact</a>
+            <a href="../../en/freefem/index.html">EN</a>
+            <a href="../../es/freefem/index.html">ES</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>FreeFEM Documentation</h1>
+        <p>
+            Documented finite element work including formulation, implementation,
+            validation, and engineering interpretation.
+        </p>
+    </section>
+
+    <!-- DOC LAYOUT -->
+    <section class="projects-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="projects-sidebar fade-in">
+            <h3>Contents</h3>
+            <nav class="projects-toc">
+                <a href="#introduction">Introduction</a>
+                <a href="#getting-started">Getting Started</a>
+                <a href="#pcm-thermal-storage">PCM Thermal Storage Modeling</a>
+                <a href="#lithium-ion-battery-modeling">Lithium-Ion Battery Modeling</a>
+                <a href="#thermal-interface-analysis">Thermal Interface Analysis</a>
+                <a href="#future-cases">Future Cases</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="projects-content">
+
+            <section id="introduction" class="projects-section fade-in">
+                <h2>Introduction</h2>
+                <p>
+                    This section gathers finite element projects developed in FreeFEM and documented
+                    with greater numerical and technical depth.
+                </p>
+                <p>
+                    The purpose is not only to present simulation results, but also to show the structure
+                    of the model: problem definition, variational formulation, treatment of domains and interfaces,
+                    numerical implementation, validation, and interpretation of results.
+                </p>
+            </section>
+
+            <section id="getting-started" class="projects-section fade-in">
+                <h2>Getting Started</h2>
+
+                <article class="project-entry fade-in">
+                    <img src="../../images/project-freefem-getting-started.jpg" alt="FreeFEM getting started preview">
+                    <div class="project-entry-content">
+                        <h3>Getting Started with FreeFEM Cases</h3>
+                        <p class="project-subtitle">
+                            Notes on structure, workflow, and how the documented cases are organized
+                        </p>
+
+                        <p>
+                            This page introduces the way FreeFEM projects are documented in this portfolio,
+                            including problem setup, formulation, implementation strategy, and interpretation.
+                        </p>
+
+                        <a href="getting-started.html" class="project-link">Open Page →</a>
+                    </div>
+                </article>
+            </section>
+
+            <section id="pcm-thermal-storage" class="projects-section fade-in">
+                <h2>PCM Thermal Storage Modeling</h2>
+
+                <article class="project-entry fade-in">
+                    <img src="../../images/project-freefem-pcm.jpg" alt="PCM thermal storage modeling preview">
+                    <div class="project-entry-content">
+                        <h3>PCM Thermal Storage Modeling</h3>
+                        <p class="project-subtitle">
+                            Finite element implementation, phase change modeling, and thermal analysis
+                        </p>
+
+                        <p>
+                            This case documents a FreeFEM implementation for transient thermal analysis of
+                            phase change materials, with emphasis on heat transfer behavior and numerical efficiency.
+                        </p>
+                        <p>
+                            The documentation is intended to cover the engineering context, mathematical formulation,
+                            numerical solution strategy, and interpretation of results.
+                        </p>
+
+                        <a href="pcm-thermal-storage.html" class="project-link">Open Page →</a>
+                    </div>
+                </article>
+            </section>
+
+
+
+            <section id="lithium-ion-battery-modeling" class="projects-section fade-in">
+                <h2>Lithium Ion Battery Modeling</h2>
+
+                <article class="project-entry fade-in">
+                    <img src="../../images/project-freefem-battery.jpg" alt="Lithium ion battery modeling preview">
+                    <div class="project-entry-content">
+                        <h3>Lithium Ion Battery Modeling</h3>
+                        <p class="project-subtitle">
+                            Electrochemical and thermal modeling for lithium-ion battery systems
+                        </p>
+
+                        <p>
+                            This case is intended to document finite element modeling work related to lithium-ion batteries,
+                            with emphasis on coupled transport, thermal behavior, and numerical implementation.
+                        </p>
+                        <p>
+                            The documentation can later be extended to include governing equations, domain treatment,
+                            boundary conditions, code structure, and interpretation of charge-discharge or thermal results.
+                        </p>
+
+                        <a href="lithium-ion-battery-modeling.html" class="project-link">Open Page →</a>
+                    </div>
+                </article>
+            </section>
+
+
+
+
+            <section id="thermal-interface-analysis" class="projects-section fade-in">
+                <h2>Thermal Interface Analysis</h2>
+
+                <article class="project-entry fade-in">
+                    <img src="../../images/project-freefem-interface.jpg" alt="Thermal interface analysis preview">
+                    <div class="project-entry-content">
+                        <h3>Thermal Interface Analysis</h3>
+                        <p class="project-subtitle">
+                            Domain coupling, interface treatment, and heat transfer consistency
+                        </p>
+
+                        <p>
+                            This case focuses on the numerical treatment of interfaces between regions,
+                            with emphasis on heat transfer calculations and consistency of the implemented model.
+                        </p>
+                        <p>
+                            It is intended to document both the physical interpretation of the interface and
+                            the numerical decisions taken in the FreeFEM implementation.
+                        </p>
+
+                        <a href="thermal-interface-analysis.html" class="project-link">Open Page →</a>
+                    </div>
+                </article>
+            </section>
+
+            <section id="future-cases" class="projects-section fade-in">
+                <h2>Future Cases</h2>
+                <p>
+                    This documentation space will gradually include additional FreeFEM work such as
+                    heat exchangers, thermal conduction studies, elasticity systems, and fluid problems
+                    formulated through finite element methods.
+                </p>
+            </section>
+
+        </main>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section fade-in">
+        <h2>Interested in this work?</h2>
+        <p>You can return to the Projects page or get in touch through the contact page.</p>
+        <a href="../contact.html" class="cta-button">Contact</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-col">
+                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
+                <p class="footer-brand">Allendes Computational Engineering</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="../index.html">Home</a>
+                <a href="../projects.html">Projects</a>
+                <a href="../about.html">About Me</a>
+                <a href="../contact.html">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Santiago, Chile</p>
+                <p>your.email@example.com</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../../images/linkedin.svg" alt="LinkedIn">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Allendes Computational Engineering</p>
+        </div>
+    </footer>
+
+</body>
+</html>

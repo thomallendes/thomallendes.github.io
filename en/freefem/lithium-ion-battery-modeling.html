@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lithium-Ion Battery Modeling | FreeFEM Documentation</title>
+    <meta name="description" content="Finite element documentation of lithium-ion battery modeling in FreeFEM, including thermal behavior, transport phenomena, numerical implementation, and engineering interpretation.">
+    <meta name="keywords" content="FreeFEM, lithium-ion battery, battery modeling, FEM, heat transfer, transport phenomena, electrochemical modeling, computational engineering">
+    <meta name="author" content="Thomas Allendes">
+
+    <meta property="og:title" content="Lithium Ion Battery Modeling | FreeFEM Documentation">
+    <meta property="og:description" content="Finite element documentation of lithium-ion battery modeling in FreeFEM.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/freefem/lithium-ion-battery-modeling.html">
+
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../style.css">
+
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+    }, { threshold: 0.15 });
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="../index.html">
+                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../projects.html" class="active">Projects</a>
+            <a href="../about.html">About Me</a>
+            <a href="../contact.html">Contact</a>
+            <a href="../../en/freefem/lithium-ion-battery-modeling.html">EN</a>
+            <a href="../../es/freefem/lithium-ion-battery-modeling.html">ES</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>Lithium-Ion Battery Modeling</h1>
+        <p>
+            Finite element documentation of coupled thermal and transport behavior
+            in lithium-ion battery systems using FreeFEM.
+        </p>
+    </section>
+
+    <!-- DOC LAYOUT -->
+    <section class="projects-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="projects-sidebar fade-in">
+            <h3>Contents</h3>
+            <nav class="projects-toc">
+                <a href="#overview">Overview</a>
+                <a href="#engineering-context">Engineering Context</a>
+                <a href="#problem-definition">Problem Definition</a>
+                <a href="#geometry-domains">Geometry and Domains</a>
+                <a href="#governing-model">Governing Model</a>
+                <a href="#numerical-implementation">Numerical Implementation</a>
+                <a href="#boundary-conditions">Boundary Conditions</a>
+                <a href="#results-discussion">Results and Discussion</a>
+                <a href="#validation">Validation and Consistency</a>
+                <a href="#code-structure">Code Structure</a>
+                <a href="#conclusions">Conclusions</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="projects-content">
+
+            <section id="overview" class="projects-section fade-in">
+                <h2>Overview</h2>
+                <p>
+                    This page documents a FreeFEM-based model intended to study lithium-ion battery behavior
+                    from a finite element perspective, with emphasis on thermal response, transport mechanisms,
+                    and numerical implementation.
+                </p>
+                <p>
+                    The purpose is not only to present simulation outputs, but also to expose the structure
+                    of the model: assumptions, domain decomposition, governing equations, numerical strategy,
+                    and interpretation of results.
+                </p>
+            </section>
+
+            <section id="engineering-context" class="projects-section fade-in">
+                <h2>Engineering Context</h2>
+                <p>
+                    Lithium-ion batteries are governed by coupled physical processes involving charge transport,
+                    heat generation, diffusion, and material-dependent behavior. From an engineering perspective,
+                    modeling these systems is useful for understanding performance, temperature rise, safety margins,
+                    and the effect of operating conditions.
+                </p>
+                <p>
+                    Depending on the scope of the case, the analysis may focus on thermal behavior alone,
+                    or on a more coupled description involving electrochemical and transport effects.
+                </p>
+            </section>
+
+            <section id="problem-definition" class="projects-section fade-in">
+                <h2>Problem Definition</h2>
+                <p>
+                    The objective of the model is to represent one or more relevant aspects of lithium-ion battery
+                    behavior under transient operating conditions. Typical quantities of interest may include:
+                </p>
+                <ul>
+                    <li>Temperature evolution in time</li>
+                    <li>Internal heat generation</li>
+                    <li>Potential or concentration fields</li>
+                    <li>Effect of material or geometric parameters</li>
+                    <li>Response under charge or discharge conditions</li>
+                </ul>
+                <p>
+                    This template can later be adapted depending on whether the case is mainly thermal,
+                    electrochemical, or multiphysics.
+                </p>
+            </section>
+
+            <section id="geometry-domains" class="projects-section fade-in">
+                <h2>Geometry and Domains</h2>
+                <p>
+                    The computational model may include different battery layers or simplified equivalent domains,
+                    depending on the level of fidelity adopted. For example, the system may be decomposed into:
+                </p>
+                <ul>
+                    <li><strong>Electrode regions</strong></li>
+                    <li><strong>Separator region</strong></li>
+                    <li><strong>Current collectors</strong></li>
+                    <li><strong>External casing or thermal boundaries</strong></li>
+                </ul>
+                <p>
+                    If the problem is posed in a reduced-order or thermal-only framework, these domains may be
+                    simplified while still preserving the main transport and heating mechanisms of interest.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="../../images/project-freefem-battery-geometry.jpg" alt="Lithium-ion battery geometry and computational domains">
+                    <figcaption>
+                        Example placeholder for battery geometry, layered structure, or simplified computational domains.
+                    </figcaption>
+                </figure>
+            </section>
+
+            <section id="governing-model" class="projects-section fade-in">
+                <h2>Governing Model</h2>
+                <p>
+                    The governing model can be adapted to the scope of the case. Depending on the intended level
+                    of detail, it may include:
+                </p>
+                <ul>
+                    <li>Transient heat conduction with internal heat generation</li>
+                    <li>Diffusion equations for concentration fields</li>
+                    <li>Potential equations for charge transport</li>
+                    <li>Coupled thermal-electrochemical formulations</li>
+                </ul>
+                <p>
+                    This section is intended to later include the strong form of the equations,
+                    the variational formulation, constitutive assumptions, and the coupling terms used
+                    in the FreeFEM implementation.
+                </p>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Suggested extension:</strong> this is a good place to add the governing equations,
+                        parameter definitions, and the assumptions behind the selected battery model.
+                    </p>
+                </div>
+            </section>
+
+            <section id="numerical-implementation" class="projects-section fade-in">
+                <h2>Numerical Implementation</h2>
+                <p>
+                    The model is implemented in FreeFEM using finite element discretization over the selected domains.
+                    Depending on the problem, the numerical workflow may involve:
+                </p>
+                <ul>
+                    <li>Mesh generation for layered or simplified battery geometries</li>
+                    <li>Definition of multiple finite element spaces</li>
+                    <li>Time integration for transient problems</li>
+                    <li>Nonlinear iteration if material properties or source terms depend on state variables</li>
+                    <li>Coupling between temperature, potential, and concentration fields</li>
+                </ul>
+                <p>
+                    This section should eventually explain how the equations were assembled,
+                    how the coupling was implemented, and how the outputs were computed.
+                </p>
+            </section>
+
+            <section id="boundary-conditions" class="projects-section fade-in">
+                <h2>Boundary Conditions</h2>
+                <p>
+                    Battery models are highly sensitive to the imposed operating and thermal boundary conditions.
+                    Depending on the case, these may include:
+                </p>
+                <ul>
+                    <li>Current or voltage input during charge/discharge</li>
+                    <li>Convective cooling at external surfaces</li>
+                    <li>Prescribed temperature boundaries</li>
+                    <li>Symmetry conditions in reduced geometries</li>
+                    <li>Initial conditions for temperature, concentration, or potential</li>
+                </ul>
+                <p>
+                    This part can later be adapted to explain which operating conditions were simulated
+                    and why they are relevant for the engineering question of interest.
+                </p>
+            </section>
+
+            <section id="results-discussion" class="projects-section fade-in">
+                <h2>Results and Discussion</h2>
+                <p>
+                    This section should gather the main outputs of the model and interpret them in terms of battery
+                    behavior and engineering relevance. Example outputs may include temperature maps,
+                    temporal evolution of maximum temperature, concentration distributions, or potential fields.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="../../images/project-freefem-battery-results.jpg" alt="Lithium-ion battery modeling results">
+                    <figcaption>
+                        Example placeholder for thermal fields, concentration profiles, potential distribution,
+                        or charge-discharge response.
+                    </figcaption>
+                </figure>
+
+                <p>
+                    The goal is not only to show results, but to discuss what they reveal about transport limitations,
+                    thermal accumulation, parameter sensitivity, or model behavior under different operating conditions.
+                </p>
+            </section>
+
+            <section id="validation" class="projects-section fade-in">
+                <h2>Validation and Consistency</h2>
+                <p>
+                    A documented numerical model should also explain how consistency was checked.
+                    Depending on the scope of the case, this may include:
+                </p>
+                <ul>
+                    <li>Mesh sensitivity analysis</li>
+                    <li>Time-step sensitivity</li>
+                    <li>Consistency of heat-generation trends</li>
+                    <li>Comparison against expected physical behavior</li>
+                    <li>Comparison with literature, simplified models, or reference data</li>
+                </ul>
+                <p>
+                    This section is especially important for clarifying which parts of the model
+                    have been validated and which remain exploratory.
+                </p>
+            </section>
+
+            <section id="code-structure" class="projects-section fade-in">
+                <h2>Code Structure</h2>
+                <p>
+                    This section can be used to explain how the FreeFEM script is organized. For example:
+                </p>
+                <ul>
+                    <li>Parameter definition</li>
+                    <li>Geometry and mesh</li>
+                    <li>Finite element spaces</li>
+                    <li>Material and transport properties</li>
+                    <li>Variational formulation</li>
+                    <li>Time loop or iterative solver</li>
+                    <li>Post-processing and exported quantities</li>
+                </ul>
+
+                <pre><code>// Example structure
+// 1. Parameters
+// 2. Geometry and mesh
+// 3. FE spaces
+// 4. Material and transport properties
+// 5. Governing equations and weak form
+// 6. Time integration or nonlinear solve
+// 7. Post-processing of thermal/electrochemical outputs
+                </code></pre>
+            </section>
+
+            <section id="conclusions" class="projects-section fade-in">
+                <h2>Conclusions</h2>
+                <p>
+                    This page provides a structured basis for documenting lithium-ion battery modeling work in FreeFEM.
+                    As the project evolves, it can incorporate more detailed governing equations, implementation details,
+                    numerical comparisons, and engineering conclusions.
+                </p>
+                <p>
+                    The final goal is to make the case readable both as a technical study
+                    and as a transparent record of modeling choices and numerical reasoning.
+                </p>
+            </section>
+
+        </main>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section fade-in">
+        <h2>Interested in this case?</h2>
+        <p>You can return to the FreeFEM documentation index or get in touch through the contact page.</p>
+        <a href="../contact.html" class="cta-button">Contact</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-col">
+                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
+                <p class="footer-brand">Allendes Computational Engineering</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="../index.html">Home</a>
+                <a href="../projects.html">Projects</a>
+                <a href="../about.html">About Me</a>
+                <a href="../contact.html">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Santiago, Chile</p>
+                <p>your.email@example.com</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../../images/linkedin.svg" alt="LinkedIn">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Allendes Computational Engineering</p>
+        </div>
+    </footer>
+
+</body>
+</html>

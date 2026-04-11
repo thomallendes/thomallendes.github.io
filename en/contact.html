@@ -6,29 +6,28 @@
 
     <!-- SEO -->
     <title>Contact | Allendes Computational Engineering</title>
-    <meta name="description" content="Simulación basada en física, optimización de procesos y análisis técnico para decisiones críticas. Ingeniería computacional con rigor y claridad.">
-    <meta name="keywords" content="simulación, ingeniería computacional, optimización, modelación, análisis técnico, fenómenos de transporte">
-    <meta name="author" content="Allendes Computational Engineering SpA">
+    <meta name="description" content="Get in touch with Thomas Allendes regarding computational engineering, CFD, FEM, heat transfer, and physics-based modeling projects.">
+    <meta name="keywords" content="contact, computational engineering, CFD, FEM, heat transfer, engineering simulation">
+    <meta name="author" content="Thomas Allendes">
     
-    <!-- Open Graph (para compartir en redes) -->
-    <meta property="og:title" content="Allendes Computational Engineering">
-    <meta property="og:description" content="Ingeniería computacional para decisiones críticas.">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Contact | Allendes Computational Engineering">
+    <meta property="og:description" content="Get in touch regarding computational engineering, CFD, FEM, and physics-based modeling.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="/public/assets/og-image.png">
-    <meta property="og:url" content="https://www.tusitio.cl">
+    <meta property="og:image" content="../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/contact.html">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../public/assets/favicon.png">
+    <link rel="icon" type="image/png" href="../images/favicon.png">
     
-    <!-- Tipografía -->
+    <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Estilos globales -->
+    <!-- Global Styles -->
     <link rel="stylesheet" href="../style.css">
     
-    <!-- Color del navegador (móvil) -->
     <meta name="theme-color" content="#ffffff">
 </head>
 
@@ -53,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <header class="nav">
         <div class="nav-logo">
             <a href="index.html">
-                <img src="../images/logo_TAM.png" alt="Logo" class="logo-img">
+                <img src="../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
             </a>
         </div>
 
@@ -63,99 +62,80 @@ document.addEventListener("DOMContentLoaded", () => {
             <a href="about.html">About Me</a>
             <a href="contact.html" class="active">Contact</a>
             <a href="../en/contact.html">EN</a>
-            <a href="../es/contacto.html">ES</a>
+            <a href="../es/contact.html">ES</a>
         </nav>
     </header>
 
     <!-- HERO -->
     <section class="hero hero-small fade-in">
-        <h1>Let's Talk.</h1>
-        <p>Estamos aquí para ayudarte a tomar decisiones con claridad técnica.</p>
+        <h1>Get in Touch</h1>
+        <p>
+            If you are interested in my work, feel free to reach out regarding projects,
+            collaborations, or engineering opportunities.
+        </p>
     </section>
 
     <!-- CONTACT INFO -->
     <section class="contact-section fade-in">
         <div class="contact-info">
-            <h2>Información de contacto</h2>
+            <h2>Contact Information</h2>
 
-            <p><strong>Ubicación:</strong> Santiago, Región Metropolitana, Chile</p>
-            <p><strong>Email:</strong> info@[tuempresa].cl</p>
-            <p><strong>Teléfono:</strong> +56 9 [tu número]</p>
+            <p><strong>Location:</strong> Santiago, Chile</p>
+            <p><strong>Email:</strong> your.email@example.com</p>
+            <p><strong>LinkedIn:</strong> linkedin.com/in/your-profile</p>
 
             <div class="contact-social">
                 <a href="#" aria-label="LinkedIn">
-                    <img src="../../public/assets/icons/linkedin.svg" alt="LinkedIn">
-                </a>
-                <a href="#" aria-label="Instagram">
-                    <img src="../../public/assets/icons/instagram.svg" alt="Instagram">
-                </a>
-                <a href="#" aria-label="Twitter">
-                    <img src="../../public/assets/icons/twitter.svg" alt="Twitter">
+                    <img src="../images/linkedin.svg" alt="LinkedIn">
                 </a>
             </div>
         </div>
 
-        <!-- FORMULARIO -->
+        <!-- FORM -->
         <div class="contact-form fade-in">
-            <h2>Envíanos un mensaje</h2>
+            <h2>Send a Message</h2>
 
             <form action="#" method="POST">
-                <label>Nombre</label>
-                <input type="text" name="nombre" required>
+                <label for="name">Name</label>
+                <input id="name" type="text" name="name" required>
 
-                <label>Email</label>
-                <input type="email" name="email" required>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" required>
 
-                <label>Mensaje</label>
-                <textarea name="mensaje" rows="6" required></textarea>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="6" required></textarea>
 
-                <button type="submit">Enviar</button>
+                <button type="submit">Send</button>
             </form>
         </div>
     </section>
 
-
-
-
-
-
-    
     <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-content">
 
-            <!-- COLUMNA 1: LOGO + IDENTIDAD -->
             <div class="footer-col">
-                <img src="../images/logo_TAM.png" alt="Logo" class="footer-logo">
+                <img src="../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
                 <p class="footer-brand">Allendes Computational Engineering</p>
-                <p class="footer-tagline">Ingeniería para decisiones críticas.</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
             </div>
 
-            <!-- COLUMNA 2: NAVEGACIÓN -->
             <div class="footer-col">
-                <h4>Navegación</h4>
+                <h4>Navigation</h4>
                 <a href="index.html">Home</a>
                 <a href="projects.html">Projects</a>
                 <a href="about.html">About Me</a>
                 <a href="contact.html">Contact</a>
             </div>
 
-            <!-- COLUMNA 3: CONTACTO + REDES -->
             <div class="footer-col">
                 <h4>Contact</h4>
                 <p>Santiago, Chile</p>
-                <p>info@[tuempresa].cl</p>
-                <p>+56 9 [tu número]</p>
+                <p>your.email@example.com</p>
 
                 <div class="footer-social">
                     <a href="#" aria-label="LinkedIn">
-                        <img src="../../public/assets/icons/linkedin.svg" alt="LinkedIn">
-                    </a>
-                    <a href="#" aria-label="Instagram">
-                        <img src="../../public/assets/icons/instagram.svg" alt="Instagram">
-                    </a>
-                    <a href="#" aria-label="Twitter">
-                        <img src="../../public/assets/icons/twitter.svg" alt="Twitter">
+                        <img src="../images/linkedin.svg" alt="LinkedIn">
                     </a>
                 </div>
             </div>
