@@ -6,29 +6,30 @@
 
     <!-- SEO -->
     <title>Allendes Computational Engineering</title>
-    <meta name="description" content="Simulación basada en física, optimización de procesos y análisis técnico para decisiones críticas. Ingeniería computacional con rigor y claridad.">
-    <meta name="keywords" content="simulación, ingeniería computacional, optimización, modelación, análisis técnico, fenómenos de transporte">
-    <meta name="author" content="Allendes Computational Engineering SpA">
+    <meta name="description" content="Portfolio of Thomas Allendes, Mechanical Engineer specialized in CFD, FEM, heat transfer, and physics-based modeling for engineering decision-making.">
+    <meta name="keywords" content="computational engineering, CFD, FEM, heat transfer, multiphysics, engineering simulation, physics-based modeling">
+    <meta name="author" content="Thomas Allendes">
     
-    <!-- Open Graph (para compartir en redes) -->
+    <!-- Open Graph -->
     <meta property="og:title" content="Allendes Computational Engineering">
-    <meta property="og:description" content="Ingeniería computacional para decisiones críticas.">
+    <meta property="og:description" content="CFD, FEM, and physics-based modeling for engineering decision-making.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="/public/assets/og-image.png">
-    <meta property="og:url" content="https://www.tusitio.cl">
+    <meta property="og:image" content="../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/index.html">
+    
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../public/assets/favicon.png">
+    <link rel="icon" type="image/png" href="../images/favicon.png">
     
-    <!-- Tipografía -->
+    <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Estilos globales -->
+    
+    <!-- Global Styles -->
     <link rel="stylesheet" href="../style.css">
     
-    <!-- Color del navegador (móvil) -->
     <meta name="theme-color" content="#ffffff">
 </head>
 
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <header class="nav">
         <div class="nav-logo">
             <a href="index.html">
-                <img src="../images/logo_TAM.png" alt="Logo" class="logo-img">
+                <img src="../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
             </a>
         </div>
         <nav class="nav-links">
@@ -68,99 +69,129 @@ document.addEventListener("DOMContentLoaded", () => {
 
     <!-- HERO -->
     <section class="hero fade-in">
-        <h1>Engineering que impulsa decisiones.</h1>
-        <p>Modelos numéricos, análisis técnico y optimización para resolver problemas complejos con claridad y precisión.</p>
+        <h1>CFD, FEM, and physics-based modeling for engineering decision-making.</h1>
+        <p>
+            Personal portfolio of Thomas Allendes, Mechanical Engineer specialized in computational modeling,
+            with experience in fluid flow, heat transfer, multiphysics systems, and engineering analysis applied to real problems.
+        </p>
+        <div class="hero-actions">
+            <a href="projects.html" class="cta-button">View Projects</a>
+            <a href="contact.html" class="cta-button secondary-button">Get in Touch</a>
+        </div>
     </section>
 
-    <!-- WHY US -->
+
+    <!-- INTRO -->
+    <section class="home-intro fade-in">
+        <h2>About This Portfolio</h2>
+        <p>
+            This website presents selected work in computational engineering, with a focus on simulation and
+            technical analysis grounded in physics. The emphasis is not only on building models, but on using them
+            to better understand complex systems and support sound engineering decisions.
+        </p>
+    </section>
+
+
+    <!-- FEATURED PROJECTS -->
+    <section class="home-cases">
+        <h2>Featured Projects</h2>
+        <div class="cases-list">
+            <a href="projects.html" class="case-item fade-in">
+                <img src="../images/project-kiln-placeholder.jpg" alt="Rotary kiln CFD project preview">
+                <div>
+                    <h3>Rotary Kiln Damper Optimization</h3>
+                    <p>
+                        CFD analysis of high-temperature gas-air mixing to evaluate flow behavior,
+                        temperature control, and downstream operating conditions.
+                    </p>
+                </div>
+            </a>
+
+            <a href="projects.html" class="case-item fade-in">
+                <img src="../images/project-pcm-placeholder.jpg" alt="PCM thermal modeling project preview">
+                <div>
+                    <h3>PCM Thermal Storage Modeling</h3>
+                    <p>
+                        Finite element modeling of phase change materials for thermal energy systems,
+                        with emphasis on heat transfer and numerical efficiency.
+                    </p>
+                </div>
+            </a>
+
+            <a href="projects.html" class="case-item fade-in">
+                <img src="../images/project-fem-placeholder.jpg" alt="FEM structural or thermal project preview">
+                <div>
+                    <h3>Finite Element Analysis of Engineering Systems</h3>
+                    <p>
+                        Numerical analysis of thermal and structural problems to better understand system behavior
+                        under realistic operating conditions.
+                    </p>
+                </div>
+            </a>
+        </div>
+        <a href="projects.html" class="see-all fade-in">See all projects →</a>
+    </section>
+
+
+    <!-- TECHNICAL FOCUS -->
+    <section class="home-services">
+        <h2>Technical Focus</h2>
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <h3>Computational Fluid Dynamics</h3>
+                <p>
+                    Flow behavior, turbulence, mixing, species transport, and fluid systems analyzed through
+                    physics-based numerical modeling.
+                </p>
+            </div>
+
+            <div class="service-card fade-in">
+                <h3>Finite Element Modeling</h3>
+                <p>
+                    Thermal and structural analysis of engineering systems, with attention to boundary conditions,
+                    material behavior, and numerical formulation.
+                </p>
+            </div>
+
+            <div class="service-card fade-in">
+                <h3>Heat Transfer and Multiphysics</h3>
+                <p>
+                    Conduction, convection, phase change, and coupled phenomena studied to better understand
+                    complex engineering systems.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ABOUT PREVIEW -->
     <section class="why-us">
-        <h2>Por qué trabajar con nosotros.</h2>
+        <h2>About Me</h2>
         <div class="why-grid">
             <div class="why-item fade-in">
-                <h3>Rigor técnico</h3>
-                <p>Modelos validados, metodologías claras y análisis confiables para decisiones críticas.</p>
+                <h3>Background</h3>
+                <p>
+                    Mechanical Engineer with a Master’s in Computational Mechanics, with experience in both
+                    industrial projects and research-oriented numerical modeling.
+                </p>
             </div>
             <div class="why-item fade-in">
-                <h3>Enfoque ejecutivo</h3>
-                <p>Entregables diseñados para comunicar con claridad y respaldar decisiones estratégicas.</p>
-            </div>
-            <div class="why-item fade-in">
-                <h3>Experiencia industrial</h3>
-                <p>Proyectos reales en minería, procesos industriales, manufactura y energía.</p>
-            </div>
-            <div class="why-item fade-in">
-                <h3>Independencia</h3>
-                <p>Análisis objetivos, sin conflicto de interés, centrados en el valor para tu operación.</p>
+                <h3>Approach</h3>
+                <p>
+                    I focus on identifying the governing physics of a problem, building models with the appropriate
+                    level of complexity, and translating results into useful engineering insight.
+                </p>
             </div>
         </div>
+        <a href="about.html" class="see-all fade-in">Read more →</a>
     </section>
 
-    <!-- SERVICES SUMMARY -->
-    <section class="home-services">
-        <h2>Servicios.</h2>
-        <div class="services-grid">
-            <a href="servicios/index.html" class="service-card fade-in">
-                <h3>Simulación basada en física</h3>
-                <p>CFD, DEM, FEA y modelación avanzada para comprender y optimizar sistemas reales.</p>
-            </a>
-            <a href="servicios/index.html" class="service-card fade-in">
-                <h3>Optimización de procesos</h3>
-                <p>Modelos matemáticos y análisis cuantitativo para mejorar eficiencia y confiabilidad.</p>
-            </a>
-            <a href="servicios/index.html" class="service-card fade-in">
-                <h3>Análisis técnico</h3>
-                <p>Evaluación estructural, estudios de carga, fatiga y soporte para decisiones críticas.</p>
-            </a>
-        </div>
-    </section>
-
-    <!-- INDUSTRIES SUMMARY -->
-    <section class="home-industries">
-        <h2>Industrias.</h2>
-        <div class="industries-grid">
-            <a href="industrias/mineria.html" class="industry-card fade-in">
-                <img src="../../public/assets/industrias/mineria.jpg" alt="Minería">
-                <h3>Minería</h3>
-            </a>
-            <a href="industrias/procesos.html" class="industry-card fade-in">
-                <img src="../../public/assets/industrias/procesos.jpeg" alt="Procesos industriales">
-                <h3>Procesos industriales</h3>
-            </a>
-            <a href="industrias/energia.html" class="industry-card fade-in">
-                <img src="../../public/assets/industrias/energia.jpg" alt="Energía">
-                <h3>Energía</h3>
-            </a>
-        </div>
-        <a href="industrias/index.html" class="see-all fade-in">Ver todas las industrias →</a>
-    </section>
-
-    <!-- FEATURED CASES -->
-    <section class="home-cases">
-        <h2>Casos de éxito.</h2>
-        <div class="cases-list">
-            <a href="casos-exito/caso-1.html" class="case-item fade-in">
-                <img src="../../public/assets/casos-exito/caso1.jpg" alt="Caso 1">
-                <div>
-                    <h3>Diseño de consola de alimentador</h3>
-                    <p>Gran minera de la Región de Valparaíso</p>
-                </div>
-            </a>
-            <a href="casos-exito/caso-2.html" class="case-item fade-in">
-                <img src="../../public/assets/casos-exito/caso2.png" alt="Caso 2">
-                <div>
-                    <h3>Optimización de chute y flujo de mineral</h3>
-                    <p>Operación minera de gran escala</p>
-                </div>
-            </a>
-        </div>
-        <a href="casos-exito/index.html" class="see-all fade-in">Ver todos los casos →</a>
-    </section>
-
+    
     <!-- CTA -->
     <section class="cta-section fade-in">
-        <h2>¿Tienes un desafío técnico?</h2>
-        <p>Conversemos cómo podemos ayudarte a tomar decisiones con claridad.</p>
-        <a href="contacto.html" class="cta-button">Contactar</a>
+        <h2>Interested in my work?</h2>
+        <p>Feel free to explore my projects or get in touch through the contact page.</p>
+        <a href="contact.html" class="cta-button">Contact</a>
     </section>
 
 
@@ -168,38 +199,32 @@ document.addEventListener("DOMContentLoaded", () => {
     <footer class="footer">
         <div class="footer-content">
 
-            <!-- COLUMNA 1: LOGO + IDENTIDAD -->
+            <!-- COLUMN 1 -->
             <div class="footer-col">
-                <img src="../images/logo_TAM.png" alt="Logo" class="footer-logo">
+                <img src="../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
                 <p class="footer-brand">Allendes Computational Engineering</p>
-                <p class="footer-tagline">Ingeniería para decisiones críticas.</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
             </div>
 
-            <!-- COLUMNA 2: NAVEGACIÓN -->
+            <!-- COLUMN 2 -->
             <div class="footer-col">
-                <h4>Navegación</h4>
+                <h4>Navigation</h4>
                 <a href="index.html">Home</a>
                 <a href="projects.html">Projects</a>
                 <a href="about.html">About Me</a>
                 <a href="contact.html">Contact</a>
             </div>
 
-            <!-- COLUMNA 3: CONTACTO + REDES -->
+            <!-- COLUMN 3 -->
             <div class="footer-col">
                 <h4>Contact</h4>
                 <p>Santiago, Chile</p>
-                <p>info@[tuempresa].cl</p>
+                <p>your.email@example.com</p>
                 <p>+56 9 [tu número]</p>
 
                 <div class="footer-social">
                     <a href="#" aria-label="LinkedIn">
-                        <img src="../../public/assets/icons/linkedin.svg" alt="LinkedIn">
-                    </a>
-                    <a href="#" aria-label="Instagram">
-                        <img src="../../public/assets/icons/instagram.svg" alt="Instagram">
-                    </a>
-                    <a href="#" aria-label="Twitter">
-                        <img src="../../public/assets/icons/twitter.svg" alt="Twitter">
+                        <img src="../images/linkedin.svg" alt="LinkedIn">
                     </a>
                 </div>
             </div>
