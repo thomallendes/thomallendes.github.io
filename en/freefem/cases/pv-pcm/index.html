@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Photovoltaic Cells Passive Cooling with PCM | FreeFEM Documentation</title>
+    <meta name="description" content="Finite element documentation of a PV-PCM system in FreeFEM, including transient heat transfer, natural convection, phase change, adaptive meshing, and impact on photovoltaic energy generation.">
+    <meta name="keywords" content="FreeFEM, photovoltaic panel, PCM, phase change material, PV cooling, FEM, thermal management, adaptive mesh, enthalpy-porosity, computational engineering">
+    <meta name="author" content="Thomas Allendes">
+
+    <meta property="og:title" content="Photovoltaic Cells Passive Cooling with PCM | FreeFEM Documentation">
+    <meta property="og:description" content="Finite element documentation of a photovoltaic panel cooled with phase change materials in FreeFEM.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/freefem/pv-pcm/index.html">
+
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../../../style.css">
+
+    <meta name="theme-color" content="#ffffff">
+
+    <script>
+    window.MathJax = {
+        tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+        svg: { fontCache: 'global' }
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+    }, { threshold: 0.15 });
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="../index.html">
+                <img src="../../../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="../../../index.html">Home</a>
+            <a href="../../../projects.html" class="active">Projects</a>
+            <a href="../../../about.html">About Me</a>
+            <a href="../../../contact.html">Contact</a>
+            <a href="../../../../en/freefem/pv-pcm/index.html">EN</a>
+            <a href="../../../../es/freefem/pv-pcm/index.html">ES</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>Photovoltaic Cells Passive Cooling with PCM</h1>
+        <p>
+            Finite element documentation of a photovoltaic thermal-management model with
+            phase change materials, natural convection, transient atmospheric boundary conditions,
+            and dynamic adaptive meshing in FreeFEM++.
+        </p>
+    </section>
+
+    <!-- DOC LAYOUT -->
+    <section class="projects-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="projects-sidebar fade-in">
+            <h3>Contents</h3>
+            <nav class="projects-toc">
+                <a href="#overview">Overview</a>
+                <a href="#engineering-context">Engineering Context</a>
+                <a href="#problem-definition">Problem Definition</a>
+                <a href="#physical-system">Physical System</a>
+                <a href="#mathematical-model">Mathematical Model</a>
+                <a href="#initial-boundary-conditions">Initial and Boundary Conditions</a>
+                <a href="#atmospheric-conditions">Time-Dependent Atmospheric Conditions</a>
+                <a href="#material-properties">Thermophysical Properties</a>
+                <a href="#finite-element-method">Finite Element Method</a>
+                <a href="#numerical-implementation">Numerical Implementation</a>
+                <a href="#validation">Validation and Consistency</a>
+                <a href="#results-discussion">Results and Discussion</a>
+                <a href="#code-structure">Code Structure</a>
+                <a href="#conclusions">Conclusions</a>
+                <a href="#references">References</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="projects-content">
+
+            <section id="overview" class="projects-section fade-in">
+                <h2>Overview</h2>
+                <p>
+                    This page documents a FreeFEM-based finite element model developed to study
+                    the thermal behaviour and electrical-generation response of a photovoltaic panel
+                    coupled with a passive phase change material cooling layer.
+                </p>
+                <p>
+                    The documented case goes beyond a purely conductive PCM model by incorporating
+                    conjugate heat transfer, natural convection in the melted PCM, transient heat generation
+                    in the photovoltaic layer, and time-dependent atmospheric conditions during a full
+                    day-night cycle.
+                </p>
+                <p>
+                    The objective is not only to show simulation results, but also to expose the structure
+                    of the model: physical assumptions, governing equations, numerical methodology,
+                    validation strategy, and engineering interpretation.
+                </p>
+            </section>
+
+            <section id="engineering-context" class="projects-section fade-in">
+                <h2>Engineering Context</h2>
+                <p>
+                    Photovoltaic systems lose electrical efficiency as cell temperature increases.
+                    In warm and highly irradiated climates, the thermal behaviour of the panel becomes
+                    a limiting factor for electrical performance, especially during peak daytime operation.
+                </p>
+                <p>
+                    Passive cooling with phase change materials (PCM) is attractive because it does not
+                    require pumps or additional power consumption. The PCM absorbs part of the heat
+                    rejected by the panel through latent heat storage, reducing the temperature peak
+                    and delaying thermal saturation.
+                </p>
+                <p>
+                    From an engineering perspective, this type of model is useful for comparing PCM types,
+                    evaluating PCM thickness, estimating the gain in energy generation, and quantifying the
+                    value of including natural convection and adaptive meshing in the numerical treatment.
+                </p>
+            </section>
+
+            <section id="problem-definition" class="projects-section fade-in">
+                <h2>Problem Definition</h2>
+                <p>
+                    The purpose of the model is to characterize the thermal and energetic performance
+                    of a PV-PCM system subjected to realistic transient outdoor conditions.
+                </p>
+                <p>
+                    In particular, the analysis focuses on:
+                </p>
+                <ul>
+                    <li>Temperature evolution in the photovoltaic panel and the PCM domain</li>
+                    <li>Solid-liquid phase change inside the PCM</li>
+                    <li>Natural convection in the molten PCM</li>
+                    <li>Effect of PCM material selection</li>
+                    <li>Effect of PCM thickness</li>
+                    <li>Electrical energy generation under transient thermal conditions</li>
+                    <li>Influence of dynamic adaptive meshing on computational cost and resolution</li>
+                </ul>
+                <p>
+                    The case was analyzed for two Chilean climatic zones, <strong>Vicuña</strong> and
+                    <strong>Calama</strong>, and across the four seasons of the year using hourly variable
+                    atmospheric conditions.
+                </p>
+            </section>
+
+
+
+
+
+            <section id="physical-system" class="projects-section fade-in">
+                <h2>Physical System</h2>
+
+                <p>
+                    The modeled configuration consists of a photovoltaic (PV) panel coupled with a rear
+                    phase change material (PCM) layer, which acts as a passive thermal management system.
+                    The system is composed of multiple domains with distinct thermal roles, including
+                    the glass cover, the PV-Tedlar layer, and the PCM enclosure.
+                </p>
+
+                <p>
+                    Under solar irradiation, the photovoltaic layer converts part of the incident energy
+                    into electricity, while the remaining fraction is dissipated as heat. This heat is
+                    conducted toward the rear PCM region, where it is initially stored as sensible heat
+                    and subsequently as latent heat during the phase transition process.
+                </p>
+
+                <p>
+                    As the PCM melts, buoyancy-driven flow develops within the liquid phase due to density
+                    variations, leading to natural convection. This introduces a strong coupling between
+                    heat transfer, fluid flow, and phase change, making the problem inherently transient
+                    and conjugate.
+                </p>
+
+                <figure id="fig-pv-pcm-system" class="project-figure">
+                    <img src="images/pv-pcm-system.png" alt="Schematic of the PV-PCM system">
+                    <figcaption>
+                        Schematic representation of the photovoltaic panel coupled with a rear PCM cooling layer.
+                        The system includes transient solar loading, convective and radiative heat exchange with
+                        the environment, conductive heat transfer through the PV structure, and phase change with
+                        natural convection in the PCM domain.
+                    </figcaption>
+                </figure>
+
+                <p>
+                    As shown in <span class="fig-ref" data-ref="fig-pv-pcm-system"></span>, the PV-PCM
+                    configuration captures the interaction between external atmospheric forcing and internal
+                    thermal dynamics, including conduction across layers, latent heat storage, and
+                    convection-driven heat redistribution within the melted PCM.
+                </p>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Engineering note:</strong> Unlike simplified conductive PCM models, this formulation
+                        explicitly resolves the coupling between melting, buoyancy-driven flow, and transient
+                        environmental conditions, which is essential for accurately predicting thermal performance
+                        and its impact on electrical energy generation.
+                    </p>
+                </div>
+            </section>
+
+
+
+
+
+
+            <section id="mathematical-model" class="projects-section fade-in">
+                <h2>Mathematical Model</h2>
+                <p>
+                    The PV-PCM system is modeled through the coupled conservation equations of mass,
+                    momentum, and energy, using an enthalpy-porosity formulation for the solid-liquid phase change.
+                    The formulation includes heat transfer in the solid layers of the panel, fluid motion in the
+                    molten PCM, and buoyancy effects through the Boussinesq approximation.
+                </p>
+
+                <h3>Continuity equation</h3>
+                <div class="equation-block">
+                    <div class="equation">
+                        \[
+                        \nabla \cdot \mathbf{u} = 0
+                        \]
+                    </div>
+                </div>
+
+                <h3>Momentum equation</h3>
+                <div class="equation-block">
+                    <div class="equation">
+                        \[
+                        \rho \left(
+                        \frac{\partial \mathbf{u}}{\partial t}
+                        + \mathbf{u} \cdot \nabla \mathbf{u}
+                        \right)
+                        =
+                        - \nabla p
+                        + \mu \nabla^2 \mathbf{u}
+                        + \rho \mathbf{g}\,\beta (T - T_{ref})
+                        - A(T)\mathbf{u}
+                        \]
+                    </div>
+                </div>
+
+                <p>
+                    The source term \(A(T)\mathbf{u}\) represents the damping introduced in the mushy region
+                    to progressively suppress velocity in solid-like zones, following the enthalpy-porosity approach.
+                </p>
+
+                <h3>Energy equation</h3>
+                <div class="equation-block">
+                    <div class="equation">
+                        \[
+                        \rho c_p \frac{\partial T}{\partial t}
+                        + \rho c_p \mathbf{u}\cdot\nabla T
+                        =
+                        \nabla \cdot (k \nabla T)
+                        + Q_{PV}
+                        + Q_{lat}
+                        \]
+                    </div>
+                </div>
+
+                <p>
+                    Here, \(Q_{PV}\) represents the internal heat generation associated with the part of the incident
+                    solar energy that is not converted into electricity, while \(Q_{lat}\) is the latent contribution
+                    represented through the enthalpy formulation.
+                </p>
+
+                <h3>Phase change treatment</h3>
+                <p>
+                    The melting and solidification process is represented with an enthalpy-based formulation,
+                    where the liquid fraction varies smoothly across a regularized phase transition interval.
+                    This avoids explicit front tracking while still allowing the numerical model to resolve
+                    the evolving solid-liquid interface.
+                </p>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Why this matters:</strong> this formulation is substantially richer than a simple
+                        effective-conductivity approach, because it captures the role of latent heat storage and
+                        buoyancy-driven transport once the PCM melts.
+                    </p>
+                </div>
+            </section>
+
+            <section id="initial-boundary-conditions" class="projects-section fade-in">
+                <h2>Initial and Boundary Conditions</h2>
+
+                <p>
+                    The PV-PCM system is initialized under thermal equilibrium with the ambient environment.
+                    At the beginning of the simulation, the panel and PCM are assigned the initial atmospheric temperature,
+                    and the PCM may be entirely solid depending on the selected season and material.
+                </p>
+
+                <h3>Initial condition</h3>
+                <div class="equation-block">
+                    <div class="equation">
+                        \[
+                        T(x,y,t=0) = T_{amb}(t=0)
+                        \]
+                    </div>
+                </div>
+
+                <h3>External boundary conditions</h3>
+                <p>
+                    The external surfaces exchange heat with the environment through transient convection and radiation.
+                    The atmospheric forcing changes during the 24-hour cycle, so the thermal boundary conditions
+                    are explicitly time-dependent.
+                </p>
+
+                <div class="equation-block">
+                    <div class="equation">
+                        \[
+                        -k \nabla T \cdot \mathbf{n}
+                        =
+                        h(t)\,\bigl(T - T_{amb}(t)\bigr)
+                        + \varepsilon \sigma \left(T^4 - T_{sky}^4(t)\right)
+                        \]
+                    </div>
+                </div>
+
+                <p>
+                    Side or symmetry boundaries can be simplified depending on the selected two-dimensional representation,
+                    while the coupling between internal layers is treated through continuity of temperature and heat flux.
+                </p>
+
+                <h3>Flow boundary condition inside the PCM</h3>
+                <p>
+                    No-slip conditions are imposed at the solid walls of the PCM enclosure:
+                </p>
+
+                <div class="equation-block">
+                    <div class="equation">
+                        \[
+                        \mathbf{u} = \mathbf{0}
+                        \]
+                    </div>
+                </div>
+            </section>
+
+            <section id="atmospheric-conditions" class="projects-section fade-in">
+                <h2>Time-Dependent Atmospheric Conditions</h2>
+                <p>
+                    One of the key aspects of this case is the use of realistic atmospheric inputs that vary with time
+                    over the day-night cycle. Instead of prescribing constant boundary values, the model incorporates
+                    transient solar irradiation, ambient temperature, and wind speed.
+                </p>
+                <p>
+                    These hourly profiles were considered for the cities of <strong>Vicuña</strong> and
+                    <strong>Calama</strong>, and for <strong>summer, autumn, winter, and spring</strong>.
+                    This is important because the thermal and energetic benefit of PCM depends strongly on climate,
+                    season, and daily irradiance history.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="images/atmospheric-conditions-vicuna.png" alt="Transient atmospheric conditions for Vicuña">
+                    <figcaption>
+                        Example of time-dependent atmospheric inputs used for Vicuña.
+                    </figcaption>
+                </figure>
+
+                <figure class="project-figure">
+                    <img src="images/atmospheric-conditions-calama.png" alt="Transient atmospheric conditions for Calama">
+                    <figcaption>
+                        Example of time-dependent atmospheric inputs used for Calama.
+                    </figcaption>
+                </figure>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Engineering relevance:</strong> this makes the case much more realistic than studies
+                        based on constant or idealized boundary conditions, because the PCM thermal response depends
+                        on the full loading history, not only on the instantaneous peak.
+                    </p>
+                </div>
+            </section>
+
+            <section id="material-properties" class="projects-section fade-in">
+                <h2>Thermophysical Properties</h2>
+                <p>
+                    The model considers the thermophysical properties of the photovoltaic layers and of the selected
+                    phase change materials. Several PCM candidates were evaluated in the thesis, allowing comparison
+                    of their influence on maximum panel temperature and electrical energy generation.
+                </p>
+                <p>
+                    The PCM selection is critical because thermal conductivity, latent heat, heat capacity,
+                    and melting temperature all influence how effectively the material can delay temperature rise
+                    in the panel.
+                </p>
+
+                <ul>
+                    <li>Photovoltaic multilayer system with distinct thermal properties by layer</li>
+                    <li>Phase change materials with melting ranges suitable for PV thermal control</li>
+                    <li>Temperature-sensitive thermal behaviour through the phase transition interval</li>
+                    <li>Comparative analysis for multiple PCM candidates and PCM thicknesses</li>
+                </ul>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Documentation note:</strong> in a later refinement, this section can be expanded
+                        with a full HTML table based on Table 4.1 and the validation-property tables from the thesis.
+                    </p>
+                </div>
+            </section>
+
+            <section id="finite-element-method" class="projects-section fade-in">
+                <h2>Finite Element Method</h2>
+                <p>
+                    The model is solved using the finite element method in FreeFEM++, following a Galerkin formulation
+                    of the coupled thermal-fluid problem. The numerical treatment uses Taylor-Hood elements for the
+                    flow variables and a higher-order treatment for the transient evolution of the temperature field.
+                </p>
+                <p>
+                    In the thesis, the temporal discretization was based on a <strong>BDF2</strong> scheme, the nonlinear
+                    system was solved using <strong>Newton's method</strong>, and the resulting linear systems were handled
+                    with <strong>GMRES</strong>.
+                </p>
+
+                <ul>
+                    <li>Galerkin finite element formulation</li>
+                    <li>Taylor-Hood interpolation for fluid flow</li>
+                    <li>BDF2 time discretization</li>
+                    <li>Newton linearization for the nonlinear coupled system</li>
+                    <li>GMRES iterative linear solver</li>
+                    <li>Dynamic adaptive meshing for efficiency and interface resolution</li>
+                </ul>
+            </section>
+
+            <section id="numerical-implementation" class="projects-section fade-in">
+                <h2>Numerical Implementation</h2>
+                <p>
+                    From an implementation standpoint, the model combines solid heat conduction in the PV layers
+                    with phase change and buoyancy-driven flow inside the PCM cavity. This requires updating the liquid
+                    fraction, velocity field, temperature field, and adaptive mesh configuration as the solution evolves in time.
+                </p>
+                <p>
+                    The dynamic adaptive mesh is especially important because the regions of strong gradients move
+                    during the simulation: around the solid-liquid interface, near thermal boundary layers,
+                    and in the zones where natural convection strengthens.
+                </p>
+
+                <ul>
+                    <li>Multi-domain treatment for PV layers and PCM region</li>
+                    <li>Transient update of atmospheric forcing and internal heat source</li>
+                    <li>Liquid-fraction-dependent momentum damping in the mushy region</li>
+                    <li>Adaptive remeshing driven by evolving solution gradients</li>
+                    <li>Post-processing of panel maximum temperature and generated electrical energy</li>
+                </ul>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Implementation direction in FreeFEM:</strong> for documentation purposes,
+                        the model can later be separated into geometry definition, property assignment,
+                        atmospheric-input functions, coupled variational formulation, adaptive remeshing,
+                        and post-processing modules.
+                    </p>
+                </div>
+            </section>
+
+            <section id="validation" class="projects-section fade-in">
+                <h2>Validation and Consistency</h2>
+                <p>
+                    The validation strategy is staged, which is important because the full PV-PCM model includes
+                    multiple sources of complexity: phase change, multiple domains, variable boundary conditions,
+                    and internal heat generation.
+                </p>
+
+                <h3>1) Enthalpy-model validation</h3>
+                <p>
+                    The enthalpy treatment for phase change is first validated using the one-dimensional Stefan problem,
+                    comparing the numerical solution against the analytical solution for interface position
+                    and temperature evolution.
+                </p>
+
+                <h3>2) Simplified PV-PCM validation</h3>
+                <p>
+                    A simplified conduction-based PV-PCM configuration is then compared against previously published
+                    experimental and numerical studies, neglecting natural convection in the melted PCM.
+                </p>
+
+                <h3>3) Full-model validation</h3>
+                <p>
+                    Finally, the complete PV-PCM model with natural convection is validated against reference results
+                    reported in the literature for transient temperature evolution.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="images/validation-simplified.png" alt="Validation of simplified PV-PCM model">
+                    <figcaption>
+                        Validation of the simplified PV-PCM conduction model.
+                    </figcaption>
+                </figure>
+
+                <figure class="project-figure">
+                    <img src="images/validation-complete.png" alt="Validation of complete PV-PCM model">
+                    <figcaption>
+                        Validation of the full PV-PCM model including natural convection.
+                    </figcaption>
+                </figure>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Why this validation path is strong:</strong> it separates confidence in the phase-change
+                        treatment from confidence in the full conjugate PV-PCM system.
+                    </p>
+                </div>
+            </section>
+
+            <section id="results-discussion" class="projects-section fade-in">
+                <h2>Results and Discussion</h2>
+                <p>
+                    The chapter evaluates three central engineering questions:
+                    which PCM performs better, how PCM thickness affects thermal control and energy generation,
+                    and what is gained by using natural convection and dynamic adaptive meshing in the numerical model.
+                </p>
+
+                <h3>Influence of PCM type</h3>
+                <p>
+                    Seven phase change materials were compared under transient climatic conditions.
+                    The results show that PCM choice strongly affects both the maximum temperature reached by the
+                    photovoltaic cell and the total electrical energy produced over the cycle.
+                </p>
+
+                <h3>Influence of PCM thickness</h3>
+                <p>
+                    Increasing PCM thickness generally improves thermal buffering, but it also changes the internal
+                    convective dynamics and the duration over which the material can remain effective.
+                    The thesis presents this effect for multiple seasons in both Vicuña and Calama.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="images/thickness-effect-vicuna.png" alt="Effect of PCM thickness in Vicuña">
+                    <figcaption>
+                        Effect of PCM thickness on photovoltaic temperature in Vicuña.
+                    </figcaption>
+                </figure>
+
+                <figure class="project-figure">
+                    <img src="images/thickness-effect-calama.png" alt="Effect of PCM thickness in Calama">
+                    <figcaption>
+                        Effect of PCM thickness on photovoltaic temperature in Calama.
+                    </figcaption>
+                </figure>
+
+                <h3>Electrical-energy gain</h3>
+                <p>
+                    A central result of the study is that improved thermal control translates into a measurable
+                    increase in electrical energy production. In the reported simulations, the maximum gain reached
+                    <strong>2.6%</strong>, and one of the most favorable cases achieved a maximum temperature reduction
+                    of up to <strong>4.84 °C</strong>.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="images/electrical-energy-gain.png" alt="Increase in electrical generation due to PCM">
+                    <figcaption>
+                        Increase in electrical generation associated with PCM cooling.
+                    </figcaption>
+                </figure>
+
+                <h3>Adaptive mesh and natural convection</h3>
+                <p>
+                    The thesis also shows that including natural convection produces a more complete and realistic
+                    representation of the PV-PCM system than models based only on enhanced conduction.
+                    At the same time, dynamic adaptive meshing makes this richer model computationally feasible
+                    by concentrating resolution where it is most needed.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="images/adaptive-mesh-evolution.png" alt="Adaptive mesh evolution in PV-PCM simulation">
+                    <figcaption>
+                        Dynamic adaptive mesh evolution during PV-PCM simulation.
+                    </figcaption>
+                </figure>
+
+                <figure class="project-figure">
+                    <img src="images/natural-convection-effect.png" alt="Effect of natural convection on panel temperature">
+                    <figcaption>
+                        Effect of including natural convection on the maximum panel temperature.
+                    </figcaption>
+                </figure>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Main takeaways:</strong> the PV-PCM approach reduces peak temperature,
+                        increases electrical generation, and benefits substantially from a formulation that resolves
+                        phase change and buoyancy-driven transport with adaptive meshing.
+                    </p>
+                </div>
+            </section>
+
+            <section id="code-structure" class="projects-section fade-in">
+                <h2>Code Structure</h2>
+                <p>
+                    A practical FreeFEM implementation for this case can be organized into the following blocks:
+                </p>
+
+<pre><code>// 1. Geometry and mesh
+//    - PV multilayer domain
+//    - PCM cavity
+//    - boundary labels
+
+// 2. Material properties
+//    - solid-layer properties
+//    - PCM properties
+//    - phase-change interval
+//    - buoyancy parameters
+
+// 3. Atmospheric input functions
+//    - solar irradiance G(t)
+//    - ambient temperature Tamb(t)
+//    - wind velocity Vwind(t)
+//    - convection coefficient h(t)
+
+// 4. Variational formulation
+//    - continuity
+//    - momentum with Boussinesq + porosity damping
+//    - energy with source term in PV layer
+//    - liquid fraction / enthalpy update
+
+// 5. Time loop
+//    - update atmospheric boundary conditions
+//    - solve nonlinear coupled system
+//    - adapt mesh if required
+//    - compute Tmax and energy generation
+
+// 6. Post-processing
+//    - thermal fields
+//    - velocity fields
+//    - liquid fraction
+//    - maximum PV temperature
+//    - electrical energy output
+</code></pre>
+
+                <p>
+                    This section is intentionally schematic for now. In the next refinement, it can be replaced
+                    by the actual structure of your thesis code and linked to the corresponding FreeFEM source files.
+                </p>
+            </section>
+
+            <section id="conclusions" class="projects-section fade-in">
+                <h2>Conclusions</h2>
+                <p>
+                    This case documents a substantially richer PV-cooling model than a standard conduction-only
+                    thermal study. The formulation combines phase change, natural convection, transient environmental
+                    forcing, internal heat generation, and adaptive meshing into a single engineering framework.
+                </p>
+                <p>
+                    The results support the use of PCM as an effective passive thermal-management strategy for
+                    photovoltaic systems, especially when the melting range is well matched to panel operating temperatures.
+                    The study also shows that realistic transient boundary conditions matter, because the benefit of PCM
+                    depends on climate, season, and thermal history over the full day-night cycle.
+                </p>
+                <p>
+                    From a computational standpoint, dynamic adaptive meshing is one of the key enablers of this work,
+                    allowing the model to retain physical richness while sharply reducing CPU cost relative to fixed-mesh calculations.
+                </p>
+            </section>
+
+            <section id="references" class="projects-section fade-in">
+                <h2>References</h2>
+                <p>
+                    The main reference for this case is the following thesis chapter and the literature sources
+                    used there for validation and contextual comparison.
+                </p>
+                <ul>
+                    <li>Allendes Molina, T. P. (2025). <em>Predicción de almacenamiento de energía solar con materiales de cambio de fase mediante el método de elementos finitos y mallas adaptativas</em>. Magíster en Mecánica Computacional, Universidad de La Serena.</li>
+                    <li>Brano, V. L., et al. (2014). Experimental and numerical analysis of a PV-PCM system under transient climatic conditions.</li>
+                    <li>Huang, M. J., et al. (2011). Numerical modelling of photovoltaic modules integrated with phase change materials.</li>
+                    <li>Skoplaki, E., & Palyvos, J. A. (2009). On the temperature dependence of photovoltaic module electrical performance.</li>
+                </ul>
+            </section>
+
+        </main>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section fade-in">
+        <h2>Interested in this case?</h2>
+        <p>You can return to the FreeFEM documentation index or get in touch through the contact page.</p>
+        <a href="../../../contact.html" class="cta-button">Contact</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-col">
+                <img src="../../../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
+                <p class="footer-brand">Allendes Computational Engineering</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="../../../index.html">Home</a>
+                <a href="../../../projects.html">Projects</a>
+                <a href="../../../about.html">About Me</a>
+                <a href="../../../contact.html">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Santiago, Chile</p>
+                <p>your.email@example.com</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../../images/linkedin.svg" alt="LinkedIn">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Allendes Computational Engineering</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        /* =========================
+        TABLES
+        ========================= */
+        const tables = document.querySelectorAll(".material-table");
+
+        tables.forEach((table, index) => {
+            const tableNumber = index + 1;
+            table.setAttribute("data-table-number", tableNumber);
+
+            const caption = table.querySelector("caption");
+            if (caption) {
+                const originalText =
+                    caption.getAttribute("data-original-caption") ||
+                    caption.textContent.trim();
+                caption.setAttribute("data-original-caption", originalText);
+                caption.textContent = "Table " + tableNumber + ". " + originalText;
+            }
+        });
+
+        const tableRefs = document.querySelectorAll(".table-ref");
+
+        tableRefs.forEach(ref => {
+            const targetId = ref.getAttribute("data-ref");
+            const targetTable = document.getElementById(targetId);
+
+            if (targetTable) {
+                const number = targetTable.getAttribute("data-table-number");
+                ref.textContent = "Table " + number;
+            } else {
+                ref.textContent = "Table ?";
+            }
+        });
+
+        /* =========================
+        EQUATIONS
+        ========================= */
+        const equations = document.querySelectorAll(".equation-block");
+
+        equations.forEach((eq, index) => {
+            const eqNumber = index + 1;
+            eq.setAttribute("data-eq-number", eqNumber);
+
+            const numberBox = eq.querySelector(".equation-number");
+            if (numberBox) {
+                numberBox.textContent = "(" + eqNumber + ")";
+            }
+        });
+
+        const eqRefs = document.querySelectorAll(".eq-ref");
+
+        eqRefs.forEach(ref => {
+            const targetId = ref.getAttribute("data-ref");
+            const targetEq = document.getElementById(targetId);
+
+            if (targetEq) {
+                const number = targetEq.getAttribute("data-eq-number");
+                ref.textContent = "Eq. (" + number + ")";
+            } else {
+                ref.textContent = "Eq. (?)";
+            }
+        });
+
+        /* =========================
+        FIGURES
+        ========================= */
+        const figures = document.querySelectorAll(".project-figure");
+
+        figures.forEach((figure, index) => {
+            const figNumber = index + 1;
+            figure.setAttribute("data-figure-number", figNumber);
+
+            const caption = figure.querySelector("figcaption");
+            if (caption) {
+                const originalText =
+                    caption.getAttribute("data-original-caption") ||
+                    caption.textContent.trim();
+                caption.setAttribute("data-original-caption", originalText);
+                caption.innerHTML = "<strong>Figure " + figNumber + ".</strong> " + originalText;
+            }
+        });
+
+        const figRefs = document.querySelectorAll(".fig-ref");
+
+        figRefs.forEach(ref => {
+            const targetId = ref.getAttribute("data-ref");
+            const targetFigure = document.getElementById(targetId);
+
+            if (targetFigure) {
+                const number = targetFigure.getAttribute("data-figure-number");
+                ref.textContent = "Figure " + number;
+            } else {
+                ref.textContent = "Figure ?";
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>

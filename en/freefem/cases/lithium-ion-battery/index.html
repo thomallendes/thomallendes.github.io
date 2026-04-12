@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../../../style.css">
 
     <meta name="theme-color" content="#ffffff">
 
@@ -52,17 +52,17 @@ document.addEventListener("DOMContentLoaded", () => {
     <header class="nav">
         <div class="nav-logo">
             <a href="../index.html">
-                <img src="../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
+                <img src="../../../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
             </a>
         </div>
 
         <nav class="nav-links">
-            <a href="../index.html">Home</a>
-            <a href="../projects.html" class="active">Projects</a>
-            <a href="../about.html">About Me</a>
-            <a href="../contact.html">Contact</a>
-            <a href="../../en/freefem/lithium-ion-battery-modeling.html">EN</a>
-            <a href="../../es/freefem/lithium-ion-battery-modeling.html">ES</a>
+            <a href="../../../index.html">Home</a>
+            <a href="../../../projects.html" class="active">Projects</a>
+            <a href="../../../about.html">About Me</a>
+            <a href="../../../contact.html">Contact</a>
+            <a href="../../../../en/freefem/lithium-ion-battery-modeling.html">EN</a>
+            <a href="../../../../es/freefem/lithium-ion-battery-modeling.html">ES</a>
         </nav>
     </header>
 
@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <a href="#geometry-domains">Geometry and Domains</a>
                 <a href="#mathematical-model">Mathematical Model</a>
                 <a href="#initial-boundary-conditions">Initial and Boundary Conditions</a>
+                <a href="#finite-element-method">Finite Element Method</a>
                 <a href="#numerical-implementation">Numerical Implementation</a>
                 <a href="#validation">Validation and Consistency</a>
                 <a href="#results-discussion">Results and Discussion</a>
@@ -461,25 +462,79 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <section id="initial-boundary-conditions" class="projects-section fade-in">
                 <h2>Initial and Boundary Conditions</h2>
+
                 <p>
-                    The reference study evaluates the electrothermal response of the cell under constant-current
-                    discharges of <strong>0.5C, 1C, and 1.5C</strong>, as well as under a variable-current
-                    <strong>HWFET driving cycle</strong>. In the variable-current case, the current profile was scaled
-                    to a maximum of approximately <strong>5.5 A</strong>.
+                    The electrothermal response of the cell is evaluated under constant-current discharges
+                    of <strong>0.5C, 1C, and 1.5C</strong>, as well as under a variable-current
+                    <strong>HWFET driving cycle</strong>, where the current profile is scaled
+                    to a maximum value of approximately <strong>5.5 A</strong>.
                 </p>
+
+
+                <h3>Thermal boundary conditions</h3>
                 <p>
-                    Thermally, the study assumes natural convection at the external surface and includes radiative
-                    exchange. The external radiation temperature is taken equal to the ambient temperature.
-                    The reported heat transfer coefficients increase with discharge rate, and radiation contributes
-                    at the same order as convection under free convection conditions.
+                    Heat exchange at the external surface of the cell is modeled through convection
+                    and thermal radiation. The boundary condition is expressed as:
+                </p>
+
+                <div class="equation-block">
+                    <div class="equation">
+                        \[
+                        -\mathbf{k} \nabla T \cdot \mathbf{n}
+                        = h_{conv} (T - T_{\infty}) + \varepsilon \sigma (T^4 - T_{\infty}^4)
+                        \]
+                    </div>
+                </div>
+
+                <p>
+                    where \(h_{conv}\) is the convective heat transfer coefficient,
+                    \(\varepsilon\) is the surface emissivity, and \(\sigma\) is the
+                    Stefan–Boltzmann constant. The ambient and radiative temperatures
+                    are assumed equal, \(T_{\infty} = T_{sur}\).
+                </p>
+
+                <p>
+                    Under natural convection conditions, both convection and radiation contribute
+                    at the same order of magnitude to the total heat transfer, and the effective
+                    heat transfer coefficient increases with discharge rate.
+                </p>
+
+                <h3>Electrical boundary conditions</h3>
+                <p>
+                    The electrical problem is driven by an imposed current corresponding to the
+                    specified C-rate or driving cycle. A reference potential is set in the negative
+                    tab, while the current is applied through the positive tab, ensuring global
+                    current conservation.
                 </p>
 
                 <ul>
-                    <li>Current-driven discharge cases: 0.5C, 1C, 1.5C, and HWFET</li>
-                    <li>Ambient temperature imposed externally</li>
-                    <li>Natural convection plus thermal radiation at the cell surface</li>
-                    <li>Initial fields set from the fully charged initial condition</li>
+                    <li>Negative tab: reference potential \( \phi_{neg} = 0 \)</li>
+                    <li>Positive tab: imposed current corresponding to the discharge rate</li>
+                    <li>No current flux through insulated boundaries</li>
                 </ul>
+
+
+
+                <h3>Initial conditions</h3>
+                <p>
+                    The initial state of the system corresponds to a fully charged cell under
+                    thermal equilibrium with the environment. The initial conditions are:
+                </p>
+
+                <div class="equation-block">
+                    <div class="equation">
+                        \[
+                        T(t=0) = T_{\infty}, \quad DoD = 0
+                        \]
+                    </div>
+                </div>
+
+                <p>
+                    where \(T_{\infty}\) is the ambient temperature. The initial potentials are
+                    consistent with the open-circuit condition defined by the function
+                    <span class="eq-ref" data-ref="eq-U"></span>.
+                </p>
+
             </section>
 
 
@@ -755,69 +810,102 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        /* =========================
-        TABLES
-        ========================= */
-        const tables = document.querySelectorAll(".material-table");
+document.addEventListener("DOMContentLoaded", function () {
+    /* =========================
+       TABLES
+    ========================= */
+    const tables = document.querySelectorAll(".material-table");
 
-        tables.forEach((table, index) => {
-            const tableNumber = index + 1;
-            table.setAttribute("data-table-number", tableNumber);
+    tables.forEach((table, index) => {
+        const tableNumber = index + 1;
+        table.setAttribute("data-table-number", tableNumber);
 
-            const caption = table.querySelector("caption");
-            if (caption) {
-                const originalText =
-                    caption.getAttribute("data-original-caption") ||
-                    caption.textContent.trim();
-                caption.setAttribute("data-original-caption", originalText);
-                caption.textContent = "Table " + tableNumber + ". " + originalText;
-            }
-        });
-
-        const tableRefs = document.querySelectorAll(".table-ref");
-
-        tableRefs.forEach(ref => {
-            const targetId = ref.getAttribute("data-ref");
-            const targetTable = document.getElementById(targetId);
-
-            if (targetTable) {
-                const number = targetTable.getAttribute("data-table-number");
-                ref.textContent = "Table " + number;
-            } else {
-                ref.textContent = "Table ?";
-            }
-        });
-
-        /* =========================
-        EQUATIONS
-        ========================= */
-        const equations = document.querySelectorAll(".equation-block");
-
-        equations.forEach((eq, index) => {
-            const eqNumber = index + 1;
-            eq.setAttribute("data-eq-number", eqNumber);
-
-            const numberBox = eq.querySelector(".equation-number");
-            if (numberBox) {
-                numberBox.textContent = "(" + eqNumber + ")";
-            }
-        });
-
-        const eqRefs = document.querySelectorAll(".eq-ref");
-
-        eqRefs.forEach(ref => {
-            const targetId = ref.getAttribute("data-ref");
-            const targetEq = document.getElementById(targetId);
-
-            if (targetEq) {
-                const number = targetEq.getAttribute("data-eq-number");
-                ref.textContent = "Eq. (" + number + ")";
-            } else {
-                ref.textContent = "Eq. (?)";
-            }
-        });
+        const caption = table.querySelector("caption");
+        if (caption) {
+            const originalText =
+                caption.getAttribute("data-original-caption") ||
+                caption.textContent.trim();
+            caption.setAttribute("data-original-caption", originalText);
+            caption.textContent = "Table " + tableNumber + ". " + originalText;
+        }
     });
-    </script>
+
+    const tableRefs = document.querySelectorAll(".table-ref");
+
+    tableRefs.forEach(ref => {
+        const targetId = ref.getAttribute("data-ref");
+        const targetTable = document.getElementById(targetId);
+
+        if (targetTable) {
+            const number = targetTable.getAttribute("data-table-number");
+            ref.textContent = "Table " + number;
+        } else {
+            ref.textContent = "Table ?";
+        }
+    });
+
+    /* =========================
+       EQUATIONS
+    ========================= */
+    const equations = document.querySelectorAll(".equation-block");
+
+    equations.forEach((eq, index) => {
+        const eqNumber = index + 1;
+        eq.setAttribute("data-eq-number", eqNumber);
+
+        const numberBox = eq.querySelector(".equation-number");
+        if (numberBox) {
+            numberBox.textContent = "(" + eqNumber + ")";
+        }
+    });
+
+    const eqRefs = document.querySelectorAll(".eq-ref");
+
+    eqRefs.forEach(ref => {
+        const targetId = ref.getAttribute("data-ref");
+        const targetEq = document.getElementById(targetId);
+
+        if (targetEq) {
+            const number = targetEq.getAttribute("data-eq-number");
+            ref.textContent = "Eq. (" + number + ")";
+        } else {
+            ref.textContent = "Eq. (?)";
+        }
+    });
+
+    /* =========================
+       FIGURES
+    ========================= */
+    const figures = document.querySelectorAll(".project-figure");
+
+    figures.forEach((figure, index) => {
+        const figNumber = index + 1;
+        figure.setAttribute("data-figure-number", figNumber);
+
+        const caption = figure.querySelector("figcaption");
+        if (caption) {
+            const originalText =
+                caption.getAttribute("data-original-caption") ||
+                caption.textContent.trim();
+            caption.setAttribute("data-original-caption", originalText);
+            caption.innerHTML = "<strong>Figure " + figNumber + ".</strong> " + originalText;
+        }
+    });
+
+    const figRefs = document.querySelectorAll(".fig-ref");
+
+    figRefs.forEach(ref => {
+        const targetId = ref.getAttribute("data-ref");
+        const targetFigure = document.getElementById(targetId);
+
+        if (targetFigure) {
+            const number = targetFigure.getAttribute("data-figure-number");
+            ref.textContent = "Figure " + number;
+        } else {
+            ref.textContent = "Figure ?";
+        }
+    });
+});
+</script>
 </body>
 </html>
