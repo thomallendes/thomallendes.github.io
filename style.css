@@ -412,6 +412,7 @@ body {
 }
 
 .projects-section {
+    max-width: 900px;
     margin-bottom: 100px;
     scroll-margin-top: 120px;
 }
@@ -433,7 +434,7 @@ body {
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr);
     gap: 28px;
-    align-items: start;
+    align-items: center;
     background: #ffffff;
     border-radius: 18px;
     padding: 24px;
@@ -487,6 +488,16 @@ body {
 
 .project-link:hover {
     opacity: 0.6;
+}
+
+.project-logo {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+    object-fit: contain;
+    margin: auto;
+    display: block;
+    
 }
 
 /* =========================
@@ -826,4 +837,100 @@ body {
     .footer {
         padding: 60px 24px 32px;
     }
+}
+
+
+
+
+
+
+
+
+/* =========================
+   TABLE STYLE (ACADEMIC)
+   ========================= */
+
+.material-table {
+    width: auto;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    border-top: 2px solid #000;   /* línea superior */
+}
+
+/* Encabezado */
+.material-table thead th {
+    border-bottom: 2px solid #000; /* línea bajo header */
+    padding: 8px 14px;
+    font-weight: 500;              /* más estilo paper */
+    text-align: center;
+}
+
+/* Celdas */
+.material-table td {
+    padding: 8px 14px;
+    text-align: center;
+}
+
+/* Primera columna alineada a la izquierda */
+.material-table td:first-child {
+    text-align: left;
+}
+
+/* Línea inferior */
+.material-table tbody tr:last-child td {
+    border-bottom: 2px solid #000;
+}
+
+/* Sin fondo */
+.material-table th,
+.material-table td {
+    background: none;
+}
+
+/* Caption */
+.material-table caption {
+    caption-side: top;
+    text-align: center;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+/* Referencias tipo "Table X" en texto */
+.table-ref {
+    font-weight: inherit;
+}
+
+
+/* =========================
+   EQUATIONS
+   ========================= */
+
+.equation-block {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 10px;
+    max-width: 700px;
+    margin: 10px auto;
+}
+
+/* Compacta ecuaciones consecutivas */
+.equation-block + .equation-block {
+    margin-top: 4px;
+}
+
+.equation {
+    text-align: center;
+}
+
+.equation-number {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    padding-right: 10px;
+}
+
+.eq-ref {
+    font-weight: inherit;
 }

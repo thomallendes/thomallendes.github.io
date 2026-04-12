@@ -24,6 +24,14 @@
     <link rel="stylesheet" href="../../style.css">
 
     <meta name="theme-color" content="#ffffff">
+
+    <script>
+    window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 
 <script>
@@ -62,9 +70,9 @@ document.addEventListener("DOMContentLoaded", () => {
     <section class="hero hero-small fade-in">
         <h1>Lithium-Ion Battery Modeling</h1>
         <p>
-            Finite element documentation of coupled thermal and transport behavior
-            in lithium-ion battery systems using FreeFEM.
-        </p>
+        Finite element documentation of an NTGK-oriented electrothermal model for a cylindrical lithium-ion cell,
+        including dual-potential formulation, heat generation, temperature evolution, and voltage response.
+    </p>
     </section>
 
     <!-- DOC LAYOUT -->
@@ -78,13 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 <a href="#engineering-context">Engineering Context</a>
                 <a href="#problem-definition">Problem Definition</a>
                 <a href="#geometry-domains">Geometry and Domains</a>
-                <a href="#governing-model">Governing Model</a>
+                <a href="#mathematical-model">Mathematical Model</a>
+                <a href="#initial-boundary-conditions">Initial and Boundary Conditions</a>
                 <a href="#numerical-implementation">Numerical Implementation</a>
-                <a href="#boundary-conditions">Boundary Conditions</a>
-                <a href="#results-discussion">Results and Discussion</a>
                 <a href="#validation">Validation and Consistency</a>
+                <a href="#results-discussion">Results and Discussion</a>
                 <a href="#code-structure">Code Structure</a>
                 <a href="#conclusions">Conclusions</a>
+                <a href="#references">References</a>
             </nav>
         </aside>
 
@@ -138,174 +147,563 @@ document.addEventListener("DOMContentLoaded", () => {
                 </p>
             </section>
 
+
+
+
             <section id="geometry-domains" class="projects-section fade-in">
                 <h2>Geometry and Domains</h2>
                 <p>
-                    The computational model may include different battery layers or simplified equivalent domains,
-                    depending on the level of fidelity adopted. For example, the system may be decomposed into:
+                    In the NTGK-oriented configuration considered here, the cylindrical 26650 cell is represented
+                    through a reduced multi-domain description composed of three main parts: the
+                    <strong>positive tab</strong>, the <strong>negative tab</strong>, and the <strong>active zone (jelly-roll)</strong>.
+                    In this framework, the shell thermal resistance is considered negligible and is therefore not modeled explicitly.
                 </p>
-                <ul>
-                    <li><strong>Electrode regions</strong></li>
-                    <li><strong>Separator region</strong></li>
-                    <li><strong>Current collectors</strong></li>
-                    <li><strong>External casing or thermal boundaries</strong></li>
-                </ul>
                 <p>
-                    If the problem is posed in a reduced-order or thermal-only framework, these domains may be
-                    simplified while still preserving the main transport and heating mechanisms of interest.
+                    This decomposition is convenient because it preserves the electrothermal structure required by the dual-potential
+                    formulation while remaining simpler than a fully resolved electrochemical description of all internal layers.
+                    For a first documented implementation in FreeFEM, this provides a clear starting point for defining regions,
+                    material properties, and coupled source terms.
                 </p>
 
                 <figure class="project-figure">
-                    <img src="../../images/project-freefem-battery-geometry.jpg" alt="Lithium-ion battery geometry and computational domains">
+                    <img src="../../images/battery_ntgk_geometry.png" alt="NTGK battery geometry with positive tab, negative tab, and jelly-roll active zone">
                     <figcaption>
-                        Example placeholder for battery geometry, layered structure, or simplified computational domains.
+                        Reference geometry used to describe the NTGK battery domains: positive tab, negative tab, and active jelly-roll region.
                     </figcaption>
                 </figure>
-            </section>
-
-            <section id="governing-model" class="projects-section fade-in">
-                <h2>Governing Model</h2>
-                <p>
-                    The governing model can be adapted to the scope of the case. Depending on the intended level
-                    of detail, it may include:
-                </p>
-                <ul>
-                    <li>Transient heat conduction with internal heat generation</li>
-                    <li>Diffusion equations for concentration fields</li>
-                    <li>Potential equations for charge transport</li>
-                    <li>Coupled thermal-electrochemical formulations</li>
-                </ul>
-                <p>
-                    This section is intended to later include the strong form of the equations,
-                    the variational formulation, constitutive assumptions, and the coupling terms used
-                    in the FreeFEM implementation.
-                </p>
 
                 <div class="project-note">
                     <p>
-                        <strong>Suggested extension:</strong> this is a good place to add the governing equations,
-                        parameter definitions, and the assumptions behind the selected battery model.
+                        <strong>Modeling note:</strong> the geometry documented here follows the same physical partition commonly used in NTGK
+                        implementations, where the electrothermal coupling is resolved over an active zone and current collectors.
                     </p>
                 </div>
             </section>
 
+
+
+
+
+            <section id="mathematical-model" class="projects-section fade-in">
+                <h2>Mathematical Model</h2>
+                <p>
+                    The present case is formulated based on the Newman–Tiedemann–Gu–Kim (NTGK) model,
+                    adopted here as a reduced electrothermal framework suitable for predicting temperature evolution,
+                    current transfer, and voltage response in a cylindrical lithium-ion cell.
+                </p>
+                <p>
+                    Within this approach, the battery is described by a coupled thermal field and two electric
+                    potential fields associated with the positive and negative current-collecting regions.
+                    The electrochemical coupling is introduced through the volumetric current transfer rate
+                    and the electrochemical heat source.
+                </p>
+
+                <h3>Thermal and electrical fields</h3>
+                <p>
+                    The thermal behavior is governed by 
+                    <span class="eq-ref" data-ref="eq-energy"></span>, while the electric potentials
+                    in the positive and negative domains are described by
+                    <span class="eq-ref" data-ref="eq-pos"></span> and 
+                    <span class="eq-ref" data-ref="eq-neg"></span>, respectively.
+                </p>
+
+                <div id="eq-energy" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \frac{\partial (\rho C_p T)}{\partial t} - \nabla \cdot (k_c \nabla T)
+                        = \sigma_{pos} |\nabla \phi_{pos}|^2 + \sigma_{neg} |\nabla \phi_{neg}|^2 + q_{ech}
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-pos" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \nabla \cdot (\sigma_{pos}\nabla \phi_{pos}) = -j
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-neg" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \nabla \cdot (\sigma_{neg}\nabla \phi_{neg}) = j
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    Here, \(T\) is the temperature, \(k_c\) is the effective thermal conductivity,
+                    \(\phi_{pos}\) and \(\phi_{neg}\) are the electric potentials,
+                    \(\sigma_{pos}\) and \(\sigma_{neg}\) are the electrical conductivities,
+                    and \(j\) is the volumetric current transfer rate.
+                    The thermal conductivity \(k_c\) is treated as an anisotropic tensor
+                    \( \mathbf{k} = (k_r, k_{\theta}, k_z) \), reflecting the layered structure
+                    of the jelly-roll.
+                </p>
+
+
+                <h3>Current transfer rate</h3>
+                <p>
+                    The volumetric current transfer rate is defined by
+                    <span class="eq-ref" data-ref="eq-current-transfer"></span>.
+                </p>
+
+                <div id="eq-current-transfer" class="equation-block">
+                    <div class="equation">
+                        \[
+                        j = \frac{C_N}{C_{ref}\,Vol\,Y}
+                        \left[ U - \left(\phi_{pos} - \phi_{neg}\right) \right]
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    In <span class="eq-ref" data-ref="eq-current-transfer"></span>,
+                    \(C_N\) denotes the nominal capacity of the cell, \(C_{ref}\) is a reference capacity,
+                    \(Vol\) is the volume of the active region, \(U\) is the open-circuit voltage,
+                    and \(Y\) is a function associated with electrochemical kinetics and charge-transfer resistance.
+                </p>
+
+                <p>
+                    This term acts as the source term in the electric potential equations
+                    <span class="eq-ref" data-ref="eq-pos"></span> and
+                    <span class="eq-ref" data-ref="eq-neg"></span>, coupling the thermal and electrical fields.
+                </p>
+
+
+    
+                <h3>NTGK closure functions</h3>
+                <p>
+                    The NTGK closure is defined through the functions
+                    <span class="eq-ref" data-ref="eq-U"></span> and
+                    <span class="eq-ref" data-ref="eq-Y"></span>, which depend on the depth of discharge \(DoD\)
+                    and temperature \(T\), where \(DoD = 1 - SOC\).
+                </p>
+
+                <div id="eq-U" class="equation-block">
+                    <div class="equation">
+                        \[
+                        U =
+                        \left(\sum_{n=0}^{5} a_n (DoD)^n \right) - C_2 (T - T_{ref})
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-Y" class="equation-block">
+                    <div class="equation">
+                        \[
+                        Y =
+                        \left(\sum_{n=0}^{5} b_n (DoD)^n \right)
+                        \exp\left[-C_1 \left(\frac{1}{T} - \frac{1}{T_{ref}}\right)\right]
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    In <span class="eq-ref" data-ref="eq-U"></span> and
+                    <span class="eq-ref" data-ref="eq-Y"></span>,
+                    the coefficients \(a_n\) and \(b_n\) are obtained through parameter estimation
+                    from experimental discharge data, while \(C_1\) and \(C_2\) are empirical constants
+                    that account for temperature dependence. These functional forms describe the dependence
+                    of the open-circuit voltage and the current transfer modulation on both state of charge
+                    and temperature.
+                </p>
+
+
+
+                <h3>Electrochemical heat source</h3>
+                <p>
+                    The electrochemical heat generation is defined by
+                    <span class="eq-ref" data-ref="eq-qech"></span>.
+                </p>
+
+                <div id="eq-qech" class="equation-block">
+                    <div class="equation">
+                        \[
+                        q_{ech} =
+                        j \left[
+                        U - (\phi_{pos} - \phi_{neg}) - T \frac{dU}{dT}
+                        \right]
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    In <span class="eq-ref" data-ref="eq-qech"></span>,
+                    the first term inside the brackets corresponds to irreversible (overpotential)
+                    heat generation, while the term \(T \frac{dU}{dT}\) represents the reversible
+                    (entropic) contribution. This formulation is consistent with Bernardi-type heat
+                    generation models and links the electrochemical and thermal behavior of the system
+                    through the current transfer rate
+                    <span class="eq-ref" data-ref="eq-current-transfer"></span>.
+                </p>
+
+
+
+                <h3>Parameters used for the NTGK functions</h3>
+                <p>
+                    The coefficients for the NTGK closure functions \(U\) and \(Y\) are summarized in
+                    <span class="table-ref" data-ref="table-ntgk"></span>. These parameters are specific
+                    to the cell chemistry and are obtained through experimental calibration.
+                </p>
+
+                <table id="table-ntgk" class="material-table">
+
+                    <caption style="caption-side: top; text-align: center; margin-bottom: 8px;">
+                        Parameters for NTGK model
+                    </caption>
+
+                    <thead>
+                        <tr>
+                            <th>Function</th>
+                            <th>a<sub>0</sub> / b<sub>0</sub></th>
+                            <th>a<sub>1</sub> / b<sub>1</sub></th>
+                            <th>a<sub>2</sub> / b<sub>2</sub></th>
+                            <th>a<sub>3</sub> / b<sub>3</sub></th>
+                            <th>a<sub>4</sub> / b<sub>4</sub></th>
+                            <th>a<sub>5</sub> / b<sub>5</sub></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td><em>U</em></td>
+                            <td>4.0682</td>
+                            <td>-1.2669</td>
+                            <td>-0.9072</td>
+                            <td>3.7550</td>
+                            <td>-2.3108</td>
+                            <td>-0.1701</td>
+                        </tr>
+                        <tr>
+                            <td><em>Y</em></td>
+                            <td>16.5066</td>
+                            <td>-27.0367</td>
+                            <td>237.3297</td>
+                            <td>-632.603</td>
+                            <td>725.0825</td>
+                            <td>-309.8760</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+
+
+
+                <h3>Material properties</h3>
+                <p>
+                    The thermophysical properties employed in the model are summarized in
+                    <span class="table-ref" data-ref="table-msmd"></span>.
+                    The active jelly-roll region exhibits anisotropic thermal behavior,
+                    with conductivity defined as \( \mathbf{k} = (k_r, k_{\theta}, k_z) \),
+                    leading to enhanced heat conduction in the tangential and axial directions
+                    compared to the radial direction.
+                </p>
+
+                <p>
+                    The positive and negative tabs are modeled as aluminium and steel, respectively,
+                    with high electrical conductivities that enable efficient current collection.
+                    In contrast, the active region is assumed to have negligible electrical conductivity,
+                    as commonly adopted in the MSMD formulation.
+                </p>
+
+                <table id="table-msmd" class="material-table">
+                    <caption style="caption-side: top; text-align: center; margin-bottom: 8px;">
+                        Properties of materials for MSMD model.
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Active Zone (jelly-roll)</th>
+                            <th>Positive Tab (aluminium)</th>
+                            <th>Negative Tab (steel)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Density (kg/m<sup>3</sup>)</td>
+                            <td>2226</td>
+                            <td>2719</td>
+                            <td>8030</td>
+                        </tr>
+                        <tr>
+                            <td>Specific heat (J/(kg·K))</td>
+                            <td>1197</td>
+                            <td>871</td>
+                            <td>502.48</td>
+                        </tr>
+                        <tr>
+                            <td>Thermal conductivity (W/(m·K))</td>
+                            <td>(0.8, 27, 27)</td>
+                            <td>202.4</td>
+                            <td>16.27</td>
+                        </tr>
+                        <tr>
+                            <td>Electrical conductivity (S/m)</td>
+                            <td>0</td>
+                            <td>3.541 × 10<sup>7</sup></td>
+                            <td>8.33 × 10<sup>6</sup></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+
+
+            <section id="initial-boundary-conditions" class="projects-section fade-in">
+                <h2>Initial and Boundary Conditions</h2>
+                <p>
+                    The reference study evaluates the electrothermal response of the cell under constant-current
+                    discharges of <strong>0.5C, 1C, and 1.5C</strong>, as well as under a variable-current
+                    <strong>HWFET driving cycle</strong>. In the variable-current case, the current profile was scaled
+                    to a maximum of approximately <strong>5.5 A</strong>.
+                </p>
+                <p>
+                    Thermally, the study assumes natural convection at the external surface and includes radiative
+                    exchange. The external radiation temperature is taken equal to the ambient temperature.
+                    The reported heat transfer coefficients increase with discharge rate, and radiation contributes
+                    at the same order as convection under free convection conditions.
+                </p>
+
+                <ul>
+                    <li>Current-driven discharge cases: 0.5C, 1C, 1.5C, and HWFET</li>
+                    <li>Ambient temperature imposed externally</li>
+                    <li>Natural convection plus thermal radiation at the cell surface</li>
+                    <li>Initial fields set from the fully charged initial condition</li>
+                </ul>
+            </section>
+
+
+
+
             <section id="numerical-implementation" class="projects-section fade-in">
                 <h2>Numerical Implementation</h2>
                 <p>
-                    The model is implemented in FreeFEM using finite element discretization over the selected domains.
-                    Depending on the problem, the numerical workflow may involve:
+                    In the original reference study, the NTGK model was solved within an MSMD framework,
+                    where the dual-potential equations and the thermal equation are coupled in time.
+                    For the present FreeFEM documentation, the same logic is useful as a roadmap:
+                    define separated regions, assign anisotropic thermal properties to the active zone,
+                    solve the electric potentials in the tab domains, compute the interfacial transfer rate \(j\),
+                    and assemble the thermal problem with the electrochemical source term \(q_{ech}\).
                 </p>
+                <p>
+                    A mesh independence study for the NTGK case selected a mesh with
+                    <strong>38,777 elements</strong> as a good compromise between accuracy and cost.
+                    In the reference simulations, a time step of <strong>1 s</strong> was used for all cases,
+                    including 0.5C, 1C, 1.5C, and the HWFET current profile.
+                </p>
+
                 <ul>
-                    <li>Mesh generation for layered or simplified battery geometries</li>
-                    <li>Definition of multiple finite element spaces</li>
-                    <li>Time integration for transient problems</li>
-                    <li>Nonlinear iteration if material properties or source terms depend on state variables</li>
-                    <li>Coupling between temperature, potential, and concentration fields</li>
+                    <li>Region-based mesh for positive tab, negative tab, and active jelly-roll</li>
+                    <li>Finite element spaces for temperature and electric potentials</li>
+                    <li>Time-marching solution with electrothermal coupling at every step</li>
+                    <li>Temperature-dependent NTGK closure through \(U(DoD,T)\) and \(Y(DoD,T)\)</li>
+                    <li>Automatic computation of electrochemical heat generation from the NTGK source term</li>
                 </ul>
-                <p>
-                    This section should eventually explain how the equations were assembled,
-                    how the coupling was implemented, and how the outputs were computed.
-                </p>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Implementation direction in FreeFEM:</strong> one practical route is to begin with a simplified
+                        two-dimensional section of the cylindrical cell, preserve the multi-region structure,
+                        and then progressively incorporate the full dual-potential coupling and voltage reconstruction.
+                    </p>
+                </div>
             </section>
 
-            <section id="boundary-conditions" class="projects-section fade-in">
-                <h2>Boundary Conditions</h2>
-                <p>
-                    Battery models are highly sensitive to the imposed operating and thermal boundary conditions.
-                    Depending on the case, these may include:
-                </p>
-                <ul>
-                    <li>Current or voltage input during charge/discharge</li>
-                    <li>Convective cooling at external surfaces</li>
-                    <li>Prescribed temperature boundaries</li>
-                    <li>Symmetry conditions in reduced geometries</li>
-                    <li>Initial conditions for temperature, concentration, or potential</li>
-                </ul>
-                <p>
-                    This part can later be adapted to explain which operating conditions were simulated
-                    and why they are relevant for the engineering question of interest.
-                </p>
-            </section>
 
-            <section id="results-discussion" class="projects-section fade-in">
-                <h2>Results and Discussion</h2>
-                <p>
-                    This section should gather the main outputs of the model and interpret them in terms of battery
-                    behavior and engineering relevance. Example outputs may include temperature maps,
-                    temporal evolution of maximum temperature, concentration distributions, or potential fields.
-                </p>
 
-                <figure class="project-figure">
-                    <img src="../../images/project-freefem-battery-results.jpg" alt="Lithium-ion battery modeling results">
-                    <figcaption>
-                        Example placeholder for thermal fields, concentration profiles, potential distribution,
-                        or charge-discharge response.
-                    </figcaption>
-                </figure>
-
-                <p>
-                    The goal is not only to show results, but to discuss what they reveal about transport limitations,
-                    thermal accumulation, parameter sensitivity, or model behavior under different operating conditions.
-                </p>
-            </section>
 
             <section id="validation" class="projects-section fade-in">
                 <h2>Validation and Consistency</h2>
                 <p>
-                    A documented numerical model should also explain how consistency was checked.
-                    Depending on the scope of the case, this may include:
+                    The reference study validates the models against measured surface temperature and reports
+                    RMS errors for each discharge condition. For the NTGK model, the reported RMS errors are:
                 </p>
+
                 <ul>
-                    <li>Mesh sensitivity analysis</li>
-                    <li>Time-step sensitivity</li>
-                    <li>Consistency of heat-generation trends</li>
-                    <li>Comparison against expected physical behavior</li>
-                    <li>Comparison with literature, simplified models, or reference data</li>
+                    <li><strong>0.5C:</strong> 0.3 °C</li>
+                    <li><strong>1C:</strong> 0.8 °C</li>
+                    <li><strong>1.5C:</strong> 1.3 °C</li>
+                    <li><strong>HWFET:</strong> 0.3 °C</li>
                 </ul>
+
                 <p>
-                    This section is especially important for clarifying which parts of the model
-                    have been validated and which remain exploratory.
+                    These values show that the NTGK model can reproduce the thermal response with good accuracy,
+                    especially at lower and moderate discharge rates. At the same time, the model is computationally
+                    much more demanding than lumped approaches, which is important when choosing the appropriate
+                    level of fidelity for engineering use.
                 </p>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Reported execution time:</strong> NTGK required 27120 s at 0.5C, 14280 s at 1C,
+                        8989 s at 1.5C, and 26460 s for HWFET in the reported runs. This is one of the main trade-offs
+                        of the model: richer physics and voltage prediction at a significantly higher cost.
+                    </p>
+                </div>
             </section>
+            
+
+
+
+
+
+            <section id="results-discussion" class="projects-section fade-in">
+                <h2>Results and Discussion</h2>
+                <p>
+                    The NTGK framework is particularly useful here because it does not only return a temperature field.
+                    It also provides access to electrochemical heat generation trends and to the voltage response,
+                    making it a stronger documentation case than a purely thermal model.
+                </p>
+
+                <h3>Heat generation</h3>
+                <p>
+                    In the reference comparison, the NTGK-predicted average volumetric heat generation was
+                    7542 W/m<sup>3</sup> at 0.5C, 22228 W/m<sup>3</sup> at 1C, 52465 W/m<sup>3</sup> at 1.5C,
+                    and 9861 W/m<sup>3</sup> under the HWFET cycle.
+                    At constant current, the NTGK heat generation tends to rise near the beginning and the end
+                    of discharge, while under HWFET it follows the variability of the imposed current profile.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="../../images/battery_ntgk_heat_generation.png" alt="NTGK volumetric heat generation for lithium-ion battery">
+                    <figcaption>
+                        Volumetric heat generation comparison, including NTGK predictions under constant C-rate and HWFET operation.
+                    </figcaption>
+                </figure>
+
+                <h3>Temperature response</h3>
+                <p>
+                    All three models compared in the paper remain consistent with the measured cell temperature,
+                    but the NTGK model shows the lowest RMS error at 0.5C and 1C.
+                    The most demanding case was 1.5C, where the measured temperature increase reached 18.1 °C.
+                    Under HWFET, all models remain in the same order of error and capture the overall dynamics well.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="../../images/battery_ntgk_temperature_comparison.png" alt="NTGK temperature comparison at 0.5C, 1C, 1.5C and HWFET">
+                    <figcaption>
+                        Temperature-increase comparison across discharge conditions. The NTGK prediction tracks the experimental response well, especially at 0.5C and 1C.
+                    </figcaption>
+                </figure>
+
+                <h3>Voltage response</h3>
+                <p>
+                    Another strong point of the NTGK model is that it reproduces the cell voltage together with the thermal response.
+                    The paper reports good agreement between measured and simulated voltage for the constant-current cases and for HWFET,
+                    although some discrepancy appears near end of discharge, where the minimum voltage is not fully reached.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="../../images/battery_ntgk_voltage_comparison.png" alt="Experimental versus simulated voltage using NTGK">
+                    <figcaption>
+                        Experimental and simulated voltage using the NTGK model for constant-current and HWFET conditions.
+                    </figcaption>
+                </figure>
+            </section>
+
+
+
+
+            
+
+
+
+
+
 
             <section id="code-structure" class="projects-section fade-in">
                 <h2>Code Structure</h2>
                 <p>
-                    This section can be used to explain how the FreeFEM script is organized. For example:
+                    For a FreeFEM implementation, the NTGK-oriented script can be organized in a modular way:
                 </p>
-                <ul>
-                    <li>Parameter definition</li>
-                    <li>Geometry and mesh</li>
-                    <li>Finite element spaces</li>
-                    <li>Material and transport properties</li>
-                    <li>Variational formulation</li>
-                    <li>Time loop or iterative solver</li>
-                    <li>Post-processing and exported quantities</li>
-                </ul>
 
-                <pre><code>// Example structure
-// 1. Parameters
-// 2. Geometry and mesh
-// 3. FE spaces
-// 4. Material and transport properties
-// 5. Governing equations and weak form
-// 6. Time integration or nonlinear solve
-// 7. Post-processing of thermal/electrochemical outputs
+                <pre><code>// 1. Global parameters
+            //    - geometry dimensions
+            //    - capacity, reference temperature
+            //    - NTGK constants C1, C2
+            //    - coefficients a0...a5 and b0...b5
+
+            // 2. Region definition and mesh
+            //    - positive tab
+            //    - negative tab
+            //    - active jelly-roll
+
+            // 3. Finite element spaces
+            //    - temperature T
+            //    - positive potential phi_pos
+            //    - negative potential phi_neg
+
+            // 4. Material properties by region
+            //    - density
+            //    - specific heat
+            //    - anisotropic thermal conductivity
+            //    - electrical conductivity
+
+            // 5. Auxiliary state variables
+            //    - depth of discharge DoD
+            //    - functions U(DoD,T) and Y(DoD,T)
+            //    - volumetric transfer current j
+            //    - electrochemical heat q_ech
+
+            // 6. Coupled solve at each time step
+            //    - solve phi_pos
+            //    - solve phi_neg
+            //    - compute j and q_ech
+            //    - solve thermal equation for T
+
+            // 7. Post-processing
+            //    - average and maximum temperature
+            //    - heat-generation trends
+            //    - terminal voltage reconstruction
+            //    - export plots and fields
                 </code></pre>
             </section>
+
+
+
+
 
             <section id="conclusions" class="projects-section fade-in">
                 <h2>Conclusions</h2>
                 <p>
-                    This page provides a structured basis for documenting lithium-ion battery modeling work in FreeFEM.
-                    As the project evolves, it can incorporate more detailed governing equations, implementation details,
-                    numerical comparisons, and engineering conclusions.
+                    This case now moves beyond a generic battery-modeling template and becomes a documented
+                    NTGK-oriented electrothermal study. The model is able to represent not only the thermal response
+                    of the cell, but also electrochemical heat generation and voltage evolution, which makes it especially
+                    attractive for engineering studies where thermal behavior alone is not sufficient.
                 </p>
                 <p>
-                    The final goal is to make the case readable both as a technical study
-                    and as a transparent record of modeling choices and numerical reasoning.
+                    The reported comparison shows that NTGK can achieve strong agreement with measured temperature,
+                    with its best thermal performance at 0.5C and 1C, while still remaining useful under the variable-current
+                    HWFET cycle. Its main limitation is computational cost, which is considerably higher than reduced thermal models.
+                </p>
+                <p>
+                    For this documentation space, the next logical step is to translate this structure into a FreeFEM implementation:
+                    first preserving the region decomposition and coupled fields, then progressively refining the source-term evaluation,
+                    voltage reconstruction, and parameter calibration strategy.
                 </p>
             </section>
+
+
+            <section id="references" class="projects-section fade-in">
+                <h2>References</h2>
+                <p>
+                    The main reference for this case is the paper by Gu et al. (2020), which presents the NTGK model and its validation against experimental data.
+                </p>
+                <ul>
+                    <li>Gu, W., Tiedemann, D., Kim, G.-H., & Newman, J. (2020). A physics-based model for electrothermal behavior of cylindrical lithium-ion batteries. Journal of The Electrochemical Society, 167(1), 010534.</li>
+                </ul>
+
+
 
         </main>
     </section>
@@ -354,5 +752,72 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </footer>
 
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        /* =========================
+        TABLES
+        ========================= */
+        const tables = document.querySelectorAll(".material-table");
+
+        tables.forEach((table, index) => {
+            const tableNumber = index + 1;
+            table.setAttribute("data-table-number", tableNumber);
+
+            const caption = table.querySelector("caption");
+            if (caption) {
+                const originalText =
+                    caption.getAttribute("data-original-caption") ||
+                    caption.textContent.trim();
+                caption.setAttribute("data-original-caption", originalText);
+                caption.textContent = "Table " + tableNumber + ". " + originalText;
+            }
+        });
+
+        const tableRefs = document.querySelectorAll(".table-ref");
+
+        tableRefs.forEach(ref => {
+            const targetId = ref.getAttribute("data-ref");
+            const targetTable = document.getElementById(targetId);
+
+            if (targetTable) {
+                const number = targetTable.getAttribute("data-table-number");
+                ref.textContent = "Table " + number;
+            } else {
+                ref.textContent = "Table ?";
+            }
+        });
+
+        /* =========================
+        EQUATIONS
+        ========================= */
+        const equations = document.querySelectorAll(".equation-block");
+
+        equations.forEach((eq, index) => {
+            const eqNumber = index + 1;
+            eq.setAttribute("data-eq-number", eqNumber);
+
+            const numberBox = eq.querySelector(".equation-number");
+            if (numberBox) {
+                numberBox.textContent = "(" + eqNumber + ")";
+            }
+        });
+
+        const eqRefs = document.querySelectorAll(".eq-ref");
+
+        eqRefs.forEach(ref => {
+            const targetId = ref.getAttribute("data-ref");
+            const targetEq = document.getElementById(targetId);
+
+            if (targetEq) {
+                const number = targetEq.getAttribute("data-eq-number");
+                ref.textContent = "Eq. (" + number + ")";
+            } else {
+                ref.textContent = "Eq. (?)";
+            }
+        });
+    });
+    </script>
 </body>
 </html>
