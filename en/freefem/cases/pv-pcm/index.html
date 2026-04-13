@@ -593,51 +593,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             <section id="atmospheric-conditions" class="projects-section fade-in">
-            <h2>Time-Dependent Atmospheric Conditions</h2>
+                <h2>Time-Dependent Atmospheric Conditions</h2>
 
-            <p>
-                A key feature of this case is the use of realistic atmospheric boundary conditions that vary over
-                the day–night cycle. Instead of prescribing constant values, the model incorporates time-dependent
-                solar irradiance \(G(t)\), ambient temperature \(T_{\infty}(t)\), and wind speed \(U_{\infty}(t)\),
-                which directly influence the thermal response of the PV-PCM system.
-            </p>
-
-            <p>
-                These hourly profiles are defined for the cities of <strong>Vicuña</strong> and
-                <strong>Calama</strong>, and for the four seasons (<strong>summer, autumn, winter, and spring</strong>).
-                This allows the model to capture the strong dependence of PCM performance on climatic conditions,
-                seasonal variability, and the temporal history of solar loading.
-            </p>
-
-            <figure class="project-figure">
-                <img src="images/pv-pcm-vicuña-atmospheric-conditions.png" alt="Transient atmospheric conditions for Vicuña">
-                <figcaption>
-                    Time-dependent atmospheric inputs used for Vicuña.
-                </figcaption>
-            </figure>
-
-            <figure class="project-figure">
-                <img src="images/pv-pcm-calama-atmospheric-conditions.png" alt="Transient atmospheric conditions for Calama">
-                <figcaption>
-                    Time-dependent atmospheric inputs used for Calama.
-                </figcaption>
-            </figure>
-
-            <p>
-                These external conditions are incorporated through boundary conditions that evolve in time,
-                affecting both convective heat transfer and radiative loading at the system boundaries.
-                In particular, the ambient temperature and wind speed determine the effective heat transfer
-                coefficient, while solar irradiance acts as a time-dependent heat source.
-            </p>
-
-            <div class="project-note">
                 <p>
-                    <strong>Engineering relevance:</strong> this approach provides a more realistic representation
-                    of operating conditions compared to constant or idealized inputs, as the thermal response of
-                    the PCM depends on the cumulative energy exchange and not only on instantaneous peak values.
+                    A key feature of this case is the use of realistic atmospheric boundary conditions that vary over
+                    the day–night cycle. Instead of prescribing constant values, the model incorporates time-dependent
+                    solar irradiance \(G(t)\), ambient temperature \(T_{\infty}(t)\), and wind speed \(U_{\infty}(t)\),
+                    which directly influence the thermal response of the PV-PCM system.
                 </p>
-            </div>
-        </section>
+
+                <p>
+                    These hourly profiles are defined for the cities of <strong>Vicuña</strong> and
+                    <strong>Calama</strong>, and for the four seasons (<strong>summer, autumn, winter, and spring</strong>).
+                    This allows the model to capture the strong dependence of PCM performance on climatic conditions,
+                    seasonal variability, and the temporal history of solar loading.
+                </p>
+
+                <figure class="project-figure">
+                    <img src="images/pv-pcm-vicuña-atmospheric-conditions.png" alt="Transient atmospheric conditions for Vicuña">
+                    <figcaption>
+                        Time-dependent atmospheric inputs used for Vicuña.
+                    </figcaption>
+                </figure>
+
+                <figure class="project-figure">
+                    <img src="images/pv-pcm-calama-atmospheric-conditions.png" alt="Transient atmospheric conditions for Calama">
+                    <figcaption>
+                        Time-dependent atmospheric inputs used for Calama.
+                    </figcaption>
+                </figure>
+
+                <p>
+                    These external conditions are incorporated through boundary conditions that evolve in time,
+                    affecting both convective heat transfer and radiative loading at the system boundaries.
+                    In particular, the ambient temperature and wind speed determine the effective heat transfer
+                    coefficient, while solar irradiance acts as a time-dependent heat source.
+                </p>
+
+                <div class="project-note">
+                    <p>
+                        <strong>Engineering relevance:</strong> this approach provides a more realistic representation
+                        of operating conditions compared to constant or idealized inputs, as the thermal response of
+                        the PCM depends on the cumulative energy exchange and not only on instantaneous peak values.
+                    </p>
+                </div>
+            </section>
 
 
 
@@ -653,31 +653,205 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <section id="material-properties" class="projects-section fade-in">
                 <h2>Thermophysical Properties</h2>
+
                 <p>
-                    The model considers the thermophysical properties of the photovoltaic layers and of the selected
-                    phase change materials. Several PCM candidates were evaluated in the thesis, allowing comparison
-                    of their influence on maximum panel temperature and electrical energy generation.
-                </p>
-                <p>
-                    The PCM selection is critical because thermal conductivity, latent heat, heat capacity,
-                    and melting temperature all influence how effectively the material can delay temperature rise
-                    in the panel.
+                    The model incorporates the thermophysical properties of both the photovoltaic multilayer system
+                    and the selected phase change materials. Multiple PCM candidates were evaluated in order to
+                    assess their influence on the thermal response of the panel and the resulting electrical performance.
                 </p>
 
-                <ul>
-                    <li>Photovoltaic multilayer system with distinct thermal properties by layer</li>
-                    <li>Phase change materials with melting ranges suitable for PV thermal control</li>
-                    <li>Temperature-sensitive thermal behaviour through the phase transition interval</li>
-                    <li>Comparative analysis for multiple PCM candidates and PCM thicknesses</li>
-                </ul>
+                <p>
+                    The selection of PCM is a key design variable, as properties such as thermal conductivity \(k\),
+                    latent heat of fusion \(h_{sl}\), specific heat capacity \(c_p\), and melting temperature \(T_f\)
+                    directly determine the material’s ability to absorb, store, and release thermal energy during
+                    transient operating conditions. The thermophysical properties used in the model are summarized in
+                    <span class="table-ref" data-ref="table-pcm-properties"></span>.
+                </p>
+
+                <table id="table-pcm-properties" class="material-table">
+                    <caption>
+                        Thermophysical properties of photovoltaic materials and PCM candidates
+                    </caption>
+
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Units</th>
+                            <th>Glass</th>
+                            <th>Tedlar</th>
+                            <th>RT-21</th>
+                            <th>RT-25</th>
+                            <th>RT-35</th>
+                            <th>n-Oct.</th>
+                            <th>CaCl₂·6H₂O</th>
+                            <th>CA</th>
+                            <th>CL</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Density (liquid)</td>
+                            <td>kg/m³</td>
+                            <td>–</td>
+                            <td>–</td>
+                            <td>770</td>
+                            <td>749</td>
+                            <td>760</td>
+                            <td>770</td>
+                            <td>1560</td>
+                            <td>790</td>
+                            <td>770</td>
+                        </tr>
+
+                        <tr>
+                            <td>Density (solid)</td>
+                            <td>kg/m³</td>
+                            <td>3000</td>
+                            <td>1200</td>
+                            <td>880</td>
+                            <td>785</td>
+                            <td>880</td>
+                            <td>865</td>
+                            <td>1710</td>
+                            <td>870</td>
+                            <td>890</td>
+                        </tr>
+
+                        <tr>
+                            <td>Specific heat (liquid)</td>
+                            <td>kJ/kg·K</td>
+                            <td>–</td>
+                            <td>–</td>
+                            <td>2.0</td>
+                            <td>2.4</td>
+                            <td>2.4</td>
+                            <td>2.196</td>
+                            <td>2.1</td>
+                            <td>2.3</td>
+                            <td>2.24</td>
+                        </tr>
+
+                        <tr>
+                            <td>Specific heat (solid)</td>
+                            <td>kJ/kg·K</td>
+                            <td>0.5</td>
+                            <td>1.25</td>
+                            <td>2.0</td>
+                            <td>1.8</td>
+                            <td>2.046</td>
+                            <td>1.934</td>
+                            <td>1.4</td>
+                            <td>2.0</td>
+                            <td>1.97</td>
+                        </tr>
+
+                        <tr>
+                            <td>Thermal conductivity (liquid)</td>
+                            <td>W/m·K</td>
+                            <td>–</td>
+                            <td>–</td>
+                            <td>0.20</td>
+                            <td>0.18</td>
+                            <td>0.20</td>
+                            <td>0.148</td>
+                            <td>0.56</td>
+                            <td>0.14</td>
+                            <td>0.139</td>
+                        </tr>
+
+                        <tr>
+                            <td>Thermal conductivity (solid)</td>
+                            <td>W/m·K</td>
+                            <td>1.8</td>
+                            <td>0.2</td>
+                            <td>0.20</td>
+                            <td>0.19</td>
+                            <td>0.20</td>
+                            <td>0.358</td>
+                            <td>1.08</td>
+                            <td>0.14</td>
+                            <td>0.143</td>
+                        </tr>
+
+                        <tr>
+                            <td>Latent heat \(h_{sl}\)</td>
+                            <td>kJ/kg</td>
+                            <td>–</td>
+                            <td>–</td>
+                            <td>155</td>
+                            <td>232</td>
+                            <td>157</td>
+                            <td>243.5</td>
+                            <td>191</td>
+                            <td>173</td>
+                            <td>168</td>
+                        </tr>
+
+                        <tr>
+                            <td>Dynamic viscosity \(\mu\)</td>
+                            <td>kg/m·s</td>
+                            <td>–</td>
+                            <td>–</td>
+                            <td>3.61×10⁻³</td>
+                            <td>1.79×10⁻³</td>
+                            <td>2.51×10⁻³</td>
+                            <td>8×10⁻³</td>
+                            <td>2.87×10⁻³</td>
+                            <td>1.82×10⁻³</td>
+                            <td>4.33×10⁻³</td>
+                        </tr>
+
+                        <tr>
+                            <td>Thermal expansion \(\beta\)</td>
+                            <td>1/K</td>
+                            <td>–</td>
+                            <td>–</td>
+                            <td>1×10⁻³</td>
+                            <td>1×10⁻³</td>
+                            <td>1×10⁻³</td>
+                            <td>9.1×10⁻⁴</td>
+                            <td>5×10⁻⁴</td>
+                            <td>7.8×10⁻⁴</td>
+                            <td>6.7×10⁻⁴</td>
+                        </tr>
+
+                        <tr>
+                            <td>Melting temperature \(T_f\)</td>
+                            <td>°C</td>
+                            <td>–</td>
+                            <td>–</td>
+                            <td>21</td>
+                            <td>26.6</td>
+                            <td>35</td>
+                            <td>28</td>
+                            <td>29.8</td>
+                            <td>22.5</td>
+                            <td>18.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    In the present model, thermophysical properties are assumed constant within each phase, with
+                    discontinuities handled through the latent heat formulation introduced in the energy equation.
+                    Density variations are only considered in the buoyancy term via the Boussinesq approximation,
+                    ensuring consistency with the incompressible flow assumption.
+                </p>
 
                 <div class="project-note">
                     <p>
-                        <strong>Documentation note:</strong> in a later refinement, this section can be expanded
-                        with a full HTML table based on Table 4.1 and the validation-property tables from the thesis.
+                        <strong>Engineering relevance:</strong> the combined effect of latent heat capacity and
+                        melting temperature determines whether the PCM can effectively limit peak temperatures
+                        and improve overall system performance under realistic operating conditions.
                     </p>
                 </div>
             </section>
+
+
+
+
+
 
             <section id="finite-element-method" class="projects-section fade-in">
                 <h2>Finite Element Method</h2>
