@@ -583,42 +583,73 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </section>
 
+
+
+
+
+
+
+
+
+
             <section id="atmospheric-conditions" class="projects-section fade-in">
-                <h2>Time-Dependent Atmospheric Conditions</h2>
+            <h2>Time-Dependent Atmospheric Conditions</h2>
+
+            <p>
+                A key feature of this case is the use of realistic atmospheric boundary conditions that vary over
+                the day–night cycle. Instead of prescribing constant values, the model incorporates time-dependent
+                solar irradiance \(G(t)\), ambient temperature \(T_{\infty}(t)\), and wind speed \(U_{\infty}(t)\),
+                which directly influence the thermal response of the PV-PCM system.
+            </p>
+
+            <p>
+                These hourly profiles are defined for the cities of <strong>Vicuña</strong> and
+                <strong>Calama</strong>, and for the four seasons (<strong>summer, autumn, winter, and spring</strong>).
+                This allows the model to capture the strong dependence of PCM performance on climatic conditions,
+                seasonal variability, and the temporal history of solar loading.
+            </p>
+
+            <figure class="project-figure">
+                <img src="images/pv-pcm-vicuña-atmospheric-conditions.png" alt="Transient atmospheric conditions for Vicuña">
+                <figcaption>
+                    Time-dependent atmospheric inputs used for Vicuña.
+                </figcaption>
+            </figure>
+
+            <figure class="project-figure">
+                <img src="images/pv-pcm-calama-atmospheric-conditions.png" alt="Transient atmospheric conditions for Calama">
+                <figcaption>
+                    Time-dependent atmospheric inputs used for Calama.
+                </figcaption>
+            </figure>
+
+            <p>
+                These external conditions are incorporated through boundary conditions that evolve in time,
+                affecting both convective heat transfer and radiative loading at the system boundaries.
+                In particular, the ambient temperature and wind speed determine the effective heat transfer
+                coefficient, while solar irradiance acts as a time-dependent heat source.
+            </p>
+
+            <div class="project-note">
                 <p>
-                    One of the key aspects of this case is the use of realistic atmospheric inputs that vary with time
-                    over the day-night cycle. Instead of prescribing constant boundary values, the model incorporates
-                    transient solar irradiation, ambient temperature, and wind speed.
+                    <strong>Engineering relevance:</strong> this approach provides a more realistic representation
+                    of operating conditions compared to constant or idealized inputs, as the thermal response of
+                    the PCM depends on the cumulative energy exchange and not only on instantaneous peak values.
                 </p>
-                <p>
-                    These hourly profiles were considered for the cities of <strong>Vicuña</strong> and
-                    <strong>Calama</strong>, and for <strong>summer, autumn, winter, and spring</strong>.
-                    This is important because the thermal and energetic benefit of PCM depends strongly on climate,
-                    season, and daily irradiance history.
-                </p>
+            </div>
+        </section>
 
-                <figure class="project-figure">
-                    <img src="images/atmospheric-conditions-vicuna.png" alt="Transient atmospheric conditions for Vicuña">
-                    <figcaption>
-                        Example of time-dependent atmospheric inputs used for Vicuña.
-                    </figcaption>
-                </figure>
 
-                <figure class="project-figure">
-                    <img src="images/atmospheric-conditions-calama.png" alt="Transient atmospheric conditions for Calama">
-                    <figcaption>
-                        Example of time-dependent atmospheric inputs used for Calama.
-                    </figcaption>
-                </figure>
 
-                <div class="project-note">
-                    <p>
-                        <strong>Engineering relevance:</strong> this makes the case much more realistic than studies
-                        based on constant or idealized boundary conditions, because the PCM thermal response depends
-                        on the full loading history, not only on the instantaneous peak.
-                    </p>
-                </div>
-            </section>
+
+
+
+
+
+
+
+
+
 
             <section id="material-properties" class="projects-section fade-in">
                 <h2>Thermophysical Properties</h2>
