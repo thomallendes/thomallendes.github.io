@@ -410,14 +410,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-                <h3>Enthalpy model for solid–liquid phase change</h3>
+
+
+                <h3>Latent heat representation</h3>
                 <p>
-                    The phase-change model adopted in the thesis is temperature-based. For pure materials,
-                    the latent contribution is introduced through a function \(s(T)\), whose general form in
-                    the mushy zone is given by <span class="eq-ref" data-ref="eq-sT"></span>. This leads to
-                    the modified problem
-                    <span class="eq-ref" data-ref="eq-pure-continuity"></span>–
-                    <span class="eq-ref" data-ref="eq-pure-energy"></span>.
+                    The phase-change process is incorporated through a temperature-based latent heat representation.
+                    For pure materials, the latent contribution is introduced via an additional function \(s(T)\),
+                    which accounts for the enthalpy variation associated with melting and solidification.
+                    This approach is consistent with classical enthalpy-based formulations for phase-change problems,
+                    as described by Voller et al. (1987).
+                    Its general form in the mushy region is given by
+                    <span class="eq-ref" data-ref="eq-sT"></span>.
                 </p>
 
                 <div id="eq-sT" class="equation-block">
@@ -434,48 +437,39 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="equation-number"></div>
                 </div>
 
-                <div id="eq-pure-continuity" class="equation-block">
-                    <div class="equation">
-                        \[
-                        \nabla \cdot \mathbf{u} = 0
-                        \]
-                    </div>
-                    <div class="equation-number"></div>
-                </div>
+                <p>
+                    Here, \(s(T)\) represents the latent contribution expressed in temperature units,
+                    where \(h_{sl}\) is the latent heat of fusion and \(c_p\) is the specific heat capacity.
+                    The constants \(s_s\) and \(s_l\) correspond to the solid and liquid states, respectively.
+                </p>
 
-                <div id="eq-pure-momentum" class="equation-block">
-                    <div class="equation">
-                        \[
-                        \frac{\partial \mathbf{u}}{\partial t}
-                        + (\mathbf{u}\cdot\nabla)\mathbf{u}
-                        + \nabla p
-                        - \nu \nabla^2 \mathbf{u}
-                        + \beta \mathbf{g}(T - T_{ref})
-                        + C_{CK}\frac{(1-Lf(T))^2}{Lf(T)^3 + b}\,\mathbf{u}
-                        = 0
-                        \]
-                    </div>
-                    <div class="equation-number"></div>
-                </div>
+                <p>
+                    Outside the phase-change interval, \(s(T)\) is constant, indicating that no latent heat is absorbed
+                    or released. Within the interval \(T_f - T_{\varepsilon} \leq T \leq T_f + T_{\varepsilon}\),
+                    the function \(F_s(T)\) provides a smooth transition between the solid and liquid states,
+                    ensuring numerical stability and consistency with the liquid fraction formulation.
+                </p>
 
-                <div id="eq-pure-energy" class="equation-block">
-                    <div class="equation">
-                        \[
-                        \frac{\partial (\rho c_p T)}{\partial t}
-                        + \frac{\partial (\rho c_p s(T))}{\partial t}
-                        + \nabla \cdot (\rho c_p T \mathbf{u})
-                        - \nabla \cdot (k \nabla T)
-                        = 0
-                        \]
-                    </div>
-                    <div class="equation-number"></div>
-                </div>
+                <p>
+                    For pure materials, this formulation also leads to a simplification of the convective term in the energy equation.
+                    Since the latent contribution depends only on temperature, it can be incorporated as a local transient term,
+                    avoiding the need to explicitly advect the latent enthalpy. As a result, the phase-change process is captured
+                    through the temporal evolution of \(s(T)\), while convection acts only on the sensible heat contribution.
+                </p>
+
+
+
+
+
+
 
                 <h3>Regularization in the mushy zone</h3>
                 <p>
-                    In the thesis, the discontinuous step-like functions are regularized using a smooth
-                    hyperbolic-tangent expression following Danaila et al. This regularization is written as
-                    <span class="eq-ref" data-ref="eq-regularization"></span>.
+                    Discontinuous step-like functions arising in the phase-change formulation are regularized
+                    using a smooth hyperbolic-tangent expression. This approach follows the formulation
+                    proposed by Danaila et al. (2014), which ensures numerical stability and enables the use of
+                    Newton-based solvers in phase-change problems with natural convection. The regularization is
+                    written as <span class="eq-ref" data-ref="eq-regularization"></span>.
                 </p>
 
                 <div id="eq-regularization" class="equation-block">
@@ -493,6 +487,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <div class="equation-number"></div>
                 </div>
+
+                <p>
+                    Here, \(F(T)\) represents a smooth approximation of a discontinuous phase-indicator function,
+                    transitioning between the solid value \(f_s\) and the liquid value \(f_l\).
+                    The parameter \(T_s\) defines the center of the transition, while \(R_s\) controls the width
+                    of the regularization interval. The parameter \(a_s\) governs the steepness of the transition,
+                    allowing the function to approximate a sharp interface while remaining differentiable.
+                </p>
+
+                <p>
+                    This regularization is consistently applied to the liquid fraction and latent heat functions,
+                    replacing discontinuous definitions with smooth counterparts. As a result, the governing equations
+                    become fully differentiable, which is essential for the convergence of Newton-type iterative methods
+                    and improves the robustness of the numerical solution.
+                </p>
+
+
             </section>
 
 
@@ -888,6 +899,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         Belhamadia, Y., Kane, A.S. and Fortin, A. (2012).
                         An enhanced mathematical model for phase change problems with natural convection.
                         International Journal of Numerical Analysis and Modeling.
+                    </li>
+                    <li id="ref-voller-1987">
+                        Voller, V.R., Cross, M. and Markatos, N.C. (1987). 
+                        An enthalpy method for convection/diffusion phase change. 
+                        International Journal for Numerical Methods in Engineering.
+                    </li>
+                    <li id="ref-danaila-2014">
+                        Danaila, I., Moglan, R., Hecht, F. and Le Masson, S. (2014). 
+                        A Newton method with adaptive finite elements for solving phase-change problems with natural convection.
+                        Journal of Computational Physics.
                     </li>
                 </ul>
             </section>
