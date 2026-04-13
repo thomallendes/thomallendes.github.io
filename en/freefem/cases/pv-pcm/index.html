@@ -229,82 +229,276 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
             <section id="mathematical-model" class="projects-section fade-in">
                 <h2>Mathematical Model</h2>
                 <p>
-                    The PV-PCM system is modeled through the coupled conservation equations of mass,
-                    momentum, and energy, using an enthalpy-porosity formulation for the solid-liquid phase change.
-                    The formulation includes heat transfer in the solid layers of the panel, fluid motion in the
-                    molten PCM, and buoyancy effects through the Boussinesq approximation.
+                    The PV-PCM system is modeled as a transient multi-domain problem. In the PCM cavity,
+                    the formulation couples mass conservation, momentum transport, and an enthalpy-based
+                    energy equation to describe melting and buoyancy-driven flow. In the solid layers,
+                    heat transfer is described by transient conduction with volumetric heat generation
+                    where appropriate. The phase-change process is represented through an enthalpy formulation,
+                    while the suppression of velocity in solid and mushy regions is introduced through a
+                    Carman–Kozeny penalization term. Buoyancy effects are incorporated using the
+                    Boussinesq approximation.
                 </p>
 
-                <h3>Continuity equation</h3>
-                <div class="equation-block">
+                <p>
+                    Let \(Q_{\mathrm{PCM},f} = \Omega_{\mathrm{PCM}} \times (0,t_f)\) and
+                    \(Q_{\mathrm{Solid},f} = \Omega_{\mathrm{Solid}} \times (0,t_f)\). Following the
+                    theoretical framework of the thesis, the problem in the PCM consists of determining
+                    the velocity field, pressure, temperature, and enthalpy, while in the solid domain
+                    only the temperature field must be solved. <span class="eq-ref" data-ref="eq-pcm-continuity"></span>–
+                    <span class="eq-ref" data-ref="eq-solid-energy"></span>
+                </p>
+
+                <h3>PCM domain</h3>
+                <p>
+                    In the PCM region, the governing equations are the continuity equation
+                    <span class="eq-ref" data-ref="eq-pcm-continuity"></span>, the momentum equation
+                    <span class="eq-ref" data-ref="eq-pcm-momentum"></span>, and the enthalpy-energy equation
+                    <span class="eq-ref" data-ref="eq-pcm-enthalpy"></span>.
+                </p>
+
+                <div id="eq-pcm-continuity" class="equation-block">
                     <div class="equation">
                         \[
                         \nabla \cdot \mathbf{u} = 0
                         \]
                     </div>
+                    <div class="equation-number"></div>
                 </div>
 
-                <h3>Momentum equation</h3>
-                <div class="equation-block">
+                <div id="eq-pcm-momentum" class="equation-block">
                     <div class="equation">
                         \[
-                        \rho \left(
                         \frac{\partial \mathbf{u}}{\partial t}
-                        + \mathbf{u} \cdot \nabla \mathbf{u}
-                        \right)
-                        =
-                        - \nabla p
-                        + \mu \nabla^2 \mathbf{u}
-                        + \rho \mathbf{g}\,\beta (T - T_{ref})
+                        + (\mathbf{u}\cdot\nabla)\mathbf{u}
+                        + \nabla p
+                        - \nu \nabla^2 \mathbf{u}
+                        + \beta \mathbf{g}(T - T_{ref})
                         - A(T)\mathbf{u}
+                        = 0
                         \]
                     </div>
+                    <div class="equation-number"></div>
                 </div>
 
-                <p>
-                    The source term \(A(T)\mathbf{u}\) represents the damping introduced in the mushy region
-                    to progressively suppress velocity in solid-like zones, following the enthalpy-porosity approach.
-                </p>
-
-                <h3>Energy equation</h3>
-                <div class="equation-block">
+                <div id="eq-pcm-enthalpy" class="equation-block">
                     <div class="equation">
                         \[
-                        \rho c_p \frac{\partial T}{\partial t}
-                        + \rho c_p \mathbf{u}\cdot\nabla T
-                        =
-                        \nabla \cdot (k \nabla T)
-                        + Q_{PV}
-                        + Q_{lat}
+                        \frac{\partial (\rho c_p T)}{\partial t}
+                        + \frac{\partial (\rho c_p s(T))}{\partial t}
+                        + \nabla \cdot (\rho c_p T \mathbf{u})
+                        - \nabla \cdot (k \nabla T)
+                        = 0
                         \]
                     </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <h3>Solid domain</h3>
+                <p>
+                    In the solid layers, the thermal model is written as a transient conduction equation
+                    with a volumetric heat-generation term, as given by
+                    <span class="eq-ref" data-ref="eq-solid-energy"></span>.
+                </p>
+
+                <div id="eq-solid-energy" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \frac{\partial (\rho c_p T)}{\partial t}
+                        - \nabla \cdot (k \nabla T)
+                        = S_{gen}
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                
+
+                <h3>Boussinesq approximation</h3>
+                <p>
+                    The buoyancy force is modeled using the Boussinesq approximation, which linearizes the
+                    density as a function of temperature according to
+                    <span class="eq-ref" data-ref="eq-boussinesq-rho"></span>.
+                    Under this approximation, density variations are only retained in the buoyancy term,
+                    leading to the modified momentum equation
+                    <span class="eq-ref" data-ref="eq-momentum-boussinesq"></span>.
+                </p>
+
+                <div id="eq-boussinesq-rho" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \rho = \rho_{ref}\left(1 - \beta(T - T_{ref})\right)
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-momentum-boussinesq" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \frac{\partial \mathbf{u}}{\partial t}
+                        + (\mathbf{u}\cdot\nabla)\mathbf{u}
+                        + \nabla p
+                        - \nu \nabla^2 \mathbf{u}
+                        + \beta \mathbf{g}(T - T_{ref})
+                        - A(T)\mathbf{u}
+                        = 0
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <h3>Carman–Kozeny penalization</h3>
+                <p>
+                    The penalization term appearing in the momentum equation is computed from the Carman–Kozeny
+                    model <span class="eq-ref" data-ref="eq-carman-kozeny"></span>, where the local liquid fraction
+                    is defined by <span class="eq-ref" data-ref="eq-liquid-fraction"></span>. This approach is consistent
+                    with the enthalpy–porosity method, in which the mushy region is modeled as a porous medium through
+                    a Carman–Kozeny-type penalization, as described by Belhamadia et al. (2012).
+                </p>
+
+                <div id="eq-carman-kozeny" class="equation-block">
+                    <div class="equation">
+                        \[
+                        A(T) =
+                        -\,\frac{C_{CK}\left(1-L_{f}(T)\right)^2}{L_{f}(T)^3 + b}
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-liquid-fraction" class="equation-block">
+                    <div class="equation">
+                        \[
+                        L_{f}(T)=
+                        \begin{cases}
+                        1, & T > T_f + T_{\varepsilon} \\[6pt]
+                        F_{L_{f}}(T), & T_f - T_{\varepsilon} \le T \le T_f + T_{\varepsilon} \\[6pt]
+                        0, & T < T_f - T_{\varepsilon}
+                        \end{cases}
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
                 </div>
 
                 <p>
-                    Here, \(Q_{PV}\) represents the internal heat generation associated with the part of the incident
-                    solar energy that is not converted into electricity, while \(Q_{lat}\) is the latent contribution
-                    represented through the enthalpy formulation.
+                    Here, \(A(T)\) is the momentum penalization coefficient, \(L_{f}(T)\) is the local liquid fraction,
+                    and \(C_{CK}\) is the Carman–Kozeny constant controlling the intensity of the velocity damping,
+                    which depends on the specific PCM considered.
+                    The parameter \(b\) is a small positive regularization constant introduced to avoid division by zero
+                    when the liquid fraction tends to zero.
                 </p>
 
-                <h3>Phase change treatment</h3>
                 <p>
-                    The melting and solidification process is represented with an enthalpy-based formulation,
-                    where the liquid fraction varies smoothly across a regularized phase transition interval.
-                    This avoids explicit front tracking while still allowing the numerical model to resolve
-                    the evolving solid-liquid interface.
+                    In the liquid region, where \(L_{f}(T)=1\), the penalization term vanishes and the PCM can flow freely.
+                    In the solid region, where \(L_{f}(T)=0\), the penalization becomes dominant and suppresses the velocity.
+                    Within the phase-change interval, the liquid fraction varies smoothly with temperature, producing the
+                    progressive damping associated with the mushy zone.
                 </p>
 
-                <div class="project-note">
-                    <p>
-                        <strong>Why this matters:</strong> this formulation is substantially richer than a simple
-                        effective-conductivity approach, because it captures the role of latent heat storage and
-                        buoyancy-driven transport once the PCM melts.
-                    </p>
+                <p>
+                    In <span class="eq-ref" data-ref="eq-liquid-fraction"></span>, \(T_f\) denotes the fusion
+                    temperature of the PCM, while \(T_{\varepsilon}\) defines the half-width of the temperature interval
+                    used to regularize the phase change around \(T_f\). Thus, the interval
+                    \(T_f - T_{\varepsilon} \leq T \leq T_f + T_{\varepsilon}\) represents the mushy region.
+                    The function \(F_{L_{f}}(T)\) is the smooth interpolation adopted in that interval to ensure a continuous
+                    transition between the solid and liquid states.
+                </p>
+
+
+
+                <h3>Enthalpy model for solid–liquid phase change</h3>
+                <p>
+                    The phase-change model adopted in the thesis is temperature-based. For pure materials,
+                    the latent contribution is introduced through a function \(s(T)\), whose general form in
+                    the mushy zone is given by <span class="eq-ref" data-ref="eq-sT"></span>. This leads to
+                    the modified problem
+                    <span class="eq-ref" data-ref="eq-pure-continuity"></span>–
+                    <span class="eq-ref" data-ref="eq-pure-energy"></span>.
+                </p>
+
+                <div id="eq-sT" class="equation-block">
+                    <div class="equation">
+                        \[
+                        s(T)=
+                        \begin{cases}
+                        s_l = \dfrac{h_{sl}}{c_p}, & T > T_f + T_{\varepsilon} \\[10pt]
+                        F_s(T), & T_f - T_{\varepsilon} \le T \le T_f + T_{\varepsilon} \\[10pt]
+                        s_s = 0, & T < T_f - T_{\varepsilon}
+                        \end{cases}
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-pure-continuity" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \nabla \cdot \mathbf{u} = 0
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-pure-momentum" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \frac{\partial \mathbf{u}}{\partial t}
+                        + (\mathbf{u}\cdot\nabla)\mathbf{u}
+                        + \nabla p
+                        - \nu \nabla^2 \mathbf{u}
+                        + \beta \mathbf{g}(T - T_{ref})
+                        + C_{CK}\frac{(1-Lf(T))^2}{Lf(T)^3 + b}\,\mathbf{u}
+                        = 0
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-pure-energy" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \frac{\partial (\rho c_p T)}{\partial t}
+                        + \frac{\partial (\rho c_p s(T))}{\partial t}
+                        + \nabla \cdot (\rho c_p T \mathbf{u})
+                        - \nabla \cdot (k \nabla T)
+                        = 0
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <h3>Regularization in the mushy zone</h3>
+                <p>
+                    In the thesis, the discontinuous step-like functions are regularized using a smooth
+                    hyperbolic-tangent expression following Danaila et al. This regularization is written as
+                    <span class="eq-ref" data-ref="eq-regularization"></span>.
+                </p>
+
+                <div id="eq-regularization" class="equation-block">
+                    <div class="equation">
+                        \[
+                        F(T; a_s, T_s, R_s)
+                        =
+                        f_l + \frac{f_s - f_l}{2}
+                        \left\{
+                        1 + \tanh\left[
+                        a_s\left(\frac{T_s - T}{R_s}\right)
+                        \right]
+                        \right\}
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
                 </div>
             </section>
+
+
+
+
+
 
             <section id="initial-boundary-conditions" class="projects-section fade-in">
                 <h2>Initial and Boundary Conditions</h2>
@@ -690,6 +884,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     <li>Brano, V. L., et al. (2014). Experimental and numerical analysis of a PV-PCM system under transient climatic conditions.</li>
                     <li>Huang, M. J., et al. (2011). Numerical modelling of photovoltaic modules integrated with phase change materials.</li>
                     <li>Skoplaki, E., & Palyvos, J. A. (2009). On the temperature dependence of photovoltaic module electrical performance.</li>
+                    <li id="ref-belhamadia">
+                        Belhamadia, Y., Kane, A.S. and Fortin, A. (2012).
+                        An enhanced mathematical model for phase change problems with natural convection.
+                        International Journal of Numerical Analysis and Modeling.
+                    </li>
                 </ul>
             </section>
 
