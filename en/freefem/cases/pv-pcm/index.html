@@ -233,30 +233,27 @@ document.addEventListener("DOMContentLoaded", () => {
             <section id="mathematical-model" class="projects-section fade-in">
                 <h2>Mathematical Model</h2>
                 <p>
-                    The PV-PCM system is modeled as a transient multi-domain problem. In the PCM cavity,
-                    the formulation couples mass conservation, momentum transport, and an enthalpy-based
-                    energy equation to describe melting and buoyancy-driven flow. In the solid layers,
-                    heat transfer is described by transient conduction with volumetric heat generation
-                    where appropriate. The phase-change process is represented through an enthalpy formulation,
-                    while the suppression of velocity in solid and mushy regions is introduced through a
-                    Carman–Kozeny penalization term. Buoyancy effects are incorporated using the
-                    Boussinesq approximation.
+                    The PV-PCM system is modeled as a transient multi-domain problem involving coupled heat transfer
+                    and fluid flow. In the PCM cavity, the formulation combines mass conservation, momentum transport,
+                    and a temperature-based energy equation to describe melting and buoyancy-driven convection.
+                    In the solid layers, heat transfer is governed by transient conduction with volumetric heat
+                    generation where appropriate.
                 </p>
 
                 <p>
-                    Let \(Q_{\mathrm{PCM},f} = \Omega_{\mathrm{PCM}} \times (0,t_f)\) and
-                    \(Q_{\mathrm{Solid},f} = \Omega_{\mathrm{Solid}} \times (0,t_f)\). Following the
-                    theoretical framework of the thesis, the problem in the PCM consists of determining
-                    the velocity field, pressure, temperature, and enthalpy, while in the solid domain
-                    only the temperature field must be solved. <span class="eq-ref" data-ref="eq-pcm-continuity"></span>–
-                    <span class="eq-ref" data-ref="eq-solid-energy"></span>
+                    The phase-change process is incorporated through a temperature-based latent heat representation,
+                    while the suppression of velocity in solid and mushy regions is introduced through a
+                    Carman–Kozeny penalization term. Buoyancy effects are modeled using the Boussinesq approximation.
+                    The governing equations are defined in the PCM and solid domains as
+                    <span class="eq-ref" data-ref="eq-pcm-continuity"></span>–
+                    <span class="eq-ref" data-ref="eq-solid-energy"></span>.
                 </p>
 
                 <h3>PCM domain</h3>
                 <p>
-                    In the PCM region, the governing equations are the continuity equation
-                    <span class="eq-ref" data-ref="eq-pcm-continuity"></span>, the momentum equation
-                    <span class="eq-ref" data-ref="eq-pcm-momentum"></span>, and the enthalpy-energy equation
+                    In the PCM region, the governing equations correspond to the conservation of mass,
+                    momentum, and energy, given by
+                    <span class="eq-ref" data-ref="eq-pcm-continuity"></span>–
                     <span class="eq-ref" data-ref="eq-pcm-enthalpy"></span>.
                 </p>
 
@@ -297,10 +294,28 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="equation-number"></div>
                 </div>
 
+                <p>
+                    This system describes an incompressible, buoyancy-driven flow with phase change. The velocity field
+                    is governed by the balance between inertial, viscous, and buoyancy forces, while the penalization
+                    term \(A(T)\) suppresses motion in solid and partially solidified regions. The energy equation
+                    accounts for both sensible and latent heat contributions through the function \(s(T)\), enabling
+                    the capture of melting and solidification without explicitly tracking the phase interface.
+                </p>
+
+                <p>
+                    In these equations, \(\mathbf{u}\) is the velocity field, \(p\) the pressure, \(\rho\) the density,
+                    \(c_p\) the specific heat capacity, \(k\) the thermal conductivity, and \(\nu\) the kinematic viscosity.
+                    The parameter \(\beta\) denotes the thermal expansion coefficient, \(\mathbf{g}\) the gravitational
+                    acceleration vector, and \(T_{ref}\) a reference temperature. The function \(A(T)\) represents the
+                    momentum penalization term, while \(s(T)\) accounts for the latent heat contribution.
+                </p>
+
+
+
                 <h3>Solid domain</h3>
                 <p>
-                    In the solid layers, the thermal model is written as a transient conduction equation
-                    with a volumetric heat-generation term, as given by
+                    In the solid layers, heat transfer is described by a transient conduction equation with
+                    a volumetric heat-generation term, as given by
                     <span class="eq-ref" data-ref="eq-solid-energy"></span>.
                 </p>
 
@@ -315,16 +330,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="equation-number"></div>
                 </div>
 
+                <p>
+                    In this region, heat transfer occurs purely by conduction, since no fluid motion is present.
+                    The term \(S_{gen}\) represents the volumetric heat generation within the solid layers, accounting
+                    for effects such as solar absorption in the PV cells. The thermal properties are assumed to
+                    be constant, and the temperature field is coupled with the PCM domain through interfacial
+                    heat flux continuity.
+                </p>
+
                 
 
                 <h3>Boussinesq approximation</h3>
                 <p>
-                    The buoyancy force is modeled using the Boussinesq approximation, which linearizes the
-                    density as a function of temperature according to
+                    Buoyancy effects are modeled using the Boussinesq approximation, in which density variations
+                    are assumed to be small and are only retained in the gravitational term. Under this assumption,
+                    the density is linearized as a function of temperature according to
                     <span class="eq-ref" data-ref="eq-boussinesq-rho"></span>.
-                    Under this approximation, density variations are only retained in the buoyancy term,
-                    leading to the modified momentum equation
-                    <span class="eq-ref" data-ref="eq-momentum-boussinesq"></span>.
                 </p>
 
                 <div id="eq-boussinesq-rho" class="equation-block">
@@ -336,20 +357,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="equation-number"></div>
                 </div>
 
-                <div id="eq-momentum-boussinesq" class="equation-block">
-                    <div class="equation">
-                        \[
-                        \frac{\partial \mathbf{u}}{\partial t}
-                        + (\mathbf{u}\cdot\nabla)\mathbf{u}
-                        + \nabla p
-                        - \nu \nabla^2 \mathbf{u}
-                        + \beta \mathbf{g}(T - T_{ref})
-                        - A(T)\mathbf{u}
-                        = 0
-                        \]
-                    </div>
-                    <div class="equation-number"></div>
-                </div>
+                <p>
+                    This approximation leads to a buoyancy force of the form \(\beta \mathbf{g}(T - T_{ref})\),
+                    which appears in the momentum equation
+                    <span class="eq-ref" data-ref="eq-pcm-momentum"></span>.
+                    It allows the flow to be treated as incompressible while still capturing
+                    natural convection driven by temperature differences.
+                </p>
+
+
+
+
 
                 <h3>Carman–Kozeny penalization</h3>
                 <p>
@@ -502,7 +520,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     become fully differentiable, which is essential for the convergence of Newton-type iterative methods
                     and improves the robustness of the numerical solution.
                 </p>
-
 
             </section>
 
