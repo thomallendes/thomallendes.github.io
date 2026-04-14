@@ -533,56 +533,180 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h2>Initial and Boundary Conditions</h2>
 
                 <p>
-                    The PV-PCM system is initialized under thermal equilibrium with the ambient environment.
-                    At the beginning of the simulation, the panel and PCM are assigned the initial atmospheric temperature,
-                    and the PCM may be entirely solid depending on the selected season and material.
+                    The PV-PCM system is initialized under quiescent thermal conditions, assuming that all
+                    domains start at the initial ambient-air temperature. At the beginning of the simulation,
+                    the phase change material is at rest, and a uniform temperature field is prescribed across
+                    the PCM, the PV-Tedlar layer, and the glass cover. This initialization is consistent with
+                    the transient day–night framework adopted in the model.
                 </p>
 
-                <h3>Initial condition</h3>
-                <div class="equation-block">
+                <p>
+                    All external forcing terms, including solar irradiance \(I(t)\), ambient temperature \(T_{\infty}(t)\),
+                    and wind velocity \(u_{\infty}(t)\), are time-dependent. For clarity, the explicit dependence on time
+                    is omitted in subsequent expressions when not strictly required.
+                </p>
+
+                <h3>Initial conditions</h3>
+
+                <p>
+                    In the PCM domain, the fluid is initially at rest, and all regions are initialized at the
+                    ambient-air temperature:
+                </p>
+
+                <div id="eq-initial-velocity" class="equation-block">
                     <div class="equation">
                         \[
-                        T(x,y,t=0) = T_{amb}(t=0)
+                        \mathbf{u}(x,y,0)=\mathbf{0}
                         \]
                     </div>
+                    <div class="equation-number"></div>
                 </div>
 
-                <h3>External boundary conditions</h3>
+                <div id="eq-initial-temperature" class="equation-block">
+                    <div class="equation">
+                        \[
+                        T(x,y,0)=T_{\infty}(0)
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <h3>External thermal boundary conditions</h3>
+
                 <p>
-                    The external surfaces exchange heat with the environment through transient convection and radiation.
-                    The atmospheric forcing changes during the 24-hour cycle, so the thermal boundary conditions
-                    are explicitly time-dependent.
+                    The external surfaces exchange heat with the environment through combined convection
+                    and long-wave radiation. These boundary conditions are driven by transient atmospheric
+                    forcing, including solar irradiance, ambient temperature, and wind velocity.
                 </p>
 
-                <div class="equation-block">
+                <p>
+                    The upper and lower surfaces are modeled using convective–radiative boundary conditions,
+                    given respectively by
+                    <span class="eq-ref" data-ref="eq-top-boundary"></span> and
+                    <span class="eq-ref" data-ref="eq-bottom-boundary"></span>.
+                </p>
+
+                <div id="eq-top-boundary" class="equation-block">
                     <div class="equation">
                         \[
                         -k \nabla T \cdot \mathbf{n}
                         =
-                        h(t)\,\bigl(T - T_{amb}(t)\bigr)
-                        + \varepsilon \sigma \left(T^4 - T_{sky}^4(t)\right)
+                        h_{sup}(T - T_{\infty})
+                        +
+                        \varepsilon_{sup}\sigma \left(T^{4}-T_{sky}^{4}\right)
                         \]
                     </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <div id="eq-bottom-boundary" class="equation-block">
+                    <div class="equation">
+                        \[
+                        -k \nabla T \cdot \mathbf{n}
+                        =
+                        h_{inf}(T - T_{\infty})
+                        +
+                        \varepsilon_{inf}\sigma \left(T^{4}-T_{ground}^{4}\right)
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
                 </div>
 
                 <p>
-                    Side or symmetry boundaries can be simplified depending on the selected two-dimensional representation,
-                    while the coupling between internal layers is treated through continuity of temperature and heat flux.
+                    Here, \(k\) is the thermal conductivity, \(\mathbf{n}\) is the outward normal vector,
+                    and \(\sigma\) is the Stefan–Boltzmann constant. The emissivities are taken as
+                    \(\varepsilon_{sup}=0.95\) and \(\varepsilon_{inf}=0.02\), consistent with values
+                    commonly reported in photovoltaic thermal studies (Smith et al., 2014).
+                </p>
+
+                <p>
+                    The convective heat transfer coefficients are defined from the air-side coefficient
+                    \(h_{air}(t)\) as
+                    <span class="eq-ref" data-ref="eq-hsup-hinf"></span>, with
+                    \(h_{sup}=h_{air}\) and \(h_{inf}=0.5\,h_{air}\),
+                    following standard correlations for inclined surfaces (Zhou et al., 2015).
+                </p>
+
+                <div id="eq-hsup-hinf" class="equation-block">
+                    <div class="equation">
+                        \[
+                        h_{sup}=h_{air},
+                        \qquad
+                        h_{inf}=0.5\,h_{air}
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    The air-side coefficient is estimated from the wind velocity using the empirical relation
+                    <span class="eq-ref" data-ref="eq-hair"></span>, where \(u_{\infty}(t)\) is expressed in m/s
+                    (Loveday and Taki, 1996).
+                </p>
+
+                <div id="eq-hair" class="equation-block">
+                    <div class="equation">
+                        \[
+                        h_{air}(t)=8.91+2\,u_{\infty}(t)
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    The effective sky temperature is estimated from the ambient-air temperature using
+                    <span class="eq-ref" data-ref="eq-tsky"></span>, following the correlation proposed
+                    by Swinbank (1963).
+                </p>
+
+                <div id="eq-tsky" class="equation-block">
+                    <div class="equation">
+                        \[
+                        T_{sky}(t)=0.0552\, \left[T_{\infty}(t)\right]^{1.5}
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    The ground temperature is assumed equal to the ambient-air temperature,
+                    \(T_{ground}=T_{\infty}\), which is justified by the low tilt angles
+                    considered in the present configuration (Arıcı et al., 2018).
+                </p>
+
+                <h3>Interface and lateral conditions</h3>
+
+                <p>
+                    At internal interfaces, continuity of temperature and heat flux is enforced,
+                    ensuring conjugate heat transfer across all layers. Lateral boundaries are
+                    treated as symmetry or adiabatic conditions depending on the selected
+                    two-dimensional representation.
                 </p>
 
                 <h3>Flow boundary condition inside the PCM</h3>
+
                 <p>
-                    No-slip conditions are imposed at the solid walls of the PCM enclosure:
+                    No-slip conditions are imposed on the solid walls of the PCM enclosure:
                 </p>
 
-                <div class="equation-block">
+                <div id="eq-noslip" class="equation-block">
                     <div class="equation">
                         \[
-                        \mathbf{u} = \mathbf{0}
+                        \mathbf{u}=\mathbf{0}
                         \]
                     </div>
+                    <div class="equation-number"></div>
                 </div>
+
+                <p>
+                    These conditions define a fully transient, coupled thermo-fluid problem,
+                    where atmospheric forcing drives both heat transfer and phase change dynamics.
+                </p>
+
             </section>
+
+
+
 
 
 
@@ -602,16 +726,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="equation">
                         \[
                         S_{gen}(t) = 
-                        \left(1 - \rho_{PV}\right) G(t)
-                        - \eta_{PV} G(t)
-                        - \alpha_{PV} G(t)
+                        \left(1 - \rho_{PV}\right) I(t)
+                        - \eta_{PV} I(t)
+                        - \alpha_{PV} I(t)
                         \]
                     </div>
                     <div class="equation-number"></div>
                 </div>
 
                 <p>
-                    In this expression, \(G(t)\) represents the time-dependent solar irradiance
+                    In this expression, \(I(t)\) represents the time-dependent solar irradiance
                     incident on the panel. The term \(\rho_{PV}\) corresponds to the reflectance
                     of the photovoltaic surface, accounting for the fraction of incoming radiation
                     that is reflected and does not contribute to energy absorption. Typical values
@@ -640,7 +764,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         \[
                         \eta_{PV}(T) = 
                         \eta_{ref} \left[1 - \beta_{PV} (T_{PV} - T_{ref}) 
-                        + \gamma_{PV} \log \left(\frac{G(t)}{1000} \right) \right]
+                        + \gamma_{PV} \log \left(\frac{I(t)}{1000} \right) \right]
                         \]
                     </div>
                     <div class="equation-number"></div>
@@ -682,13 +806,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
+
             <section id="atmospheric-conditions" class="projects-section fade-in">
                 <h2>Time-Dependent Atmospheric Conditions</h2>
 
                 <p>
                     A key feature of this case is the use of realistic atmospheric boundary conditions that vary over
                     the day–night cycle. Instead of prescribing constant values, the model incorporates time-dependent
-                    solar irradiance \(G(t)\), ambient temperature \(T_{\infty}(t)\), and wind speed \(U_{\infty}(t)\),
+                    solar irradiance \(I(t)\), ambient temperature \(T_{\infty}(t)\), and wind speed \(u_{\infty}(t)\),
                     which directly influence the thermal response of the PV-PCM system.
                 </p>
 
@@ -720,13 +846,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     coefficient, while solar irradiance acts as a time-dependent heat source.
                 </p>
 
-                <div class="project-note">
-                    <p>
-                        <strong>Engineering relevance:</strong> this approach provides a more realistic representation
-                        of operating conditions compared to constant or idealized inputs, as the thermal response of
-                        the PCM depends on the cumulative energy exchange and not only on instantaneous peak values.
-                    </p>
-                </div>
+
             </section>
 
 
@@ -928,14 +1048,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     Density variations are only considered in the buoyancy term via the Boussinesq approximation,
                     ensuring consistency with the incompressible flow assumption.
                 </p>
-
-                <div class="project-note">
-                    <p>
-                        <strong>Engineering relevance:</strong> the combined effect of latent heat capacity and
-                        melting temperature determines whether the PCM can effectively limit peak temperatures
-                        and improve overall system performance under realistic operating conditions.
-                    </p>
-                </div>
             </section>
 
 
@@ -1245,6 +1357,30 @@ document.addEventListener("DOMContentLoaded", () => {
                         Díaz, F.A., Moraga, N.O. and Cabrales, R.C. (2022). 
                         Computational modeling of a PV-PCM passive cooling system during a day–night cycle at arid and semi-arid climate zones. 
                         Energy Conversion and Management.
+                    </li>
+
+                    <li id="ref-loveday-1996">
+                        Loveday, D.L. and Taki, A.H. (1996). 
+                        Convective heat transfer coefficients at external surfaces. 
+                        Building and Environment.
+                    </li>
+
+                    <li id="ref-swinbank-1963">
+                        Swinbank, W.C. (1963). 
+                        Long-wave radiation from clear skies. 
+                        Quarterly Journal of the Royal Meteorological Society.
+                    </li>
+
+                    <li id="ref-arici-2018">
+                        Arıcı, M., Karabay, H. and Kan, M. (2018). 
+                        Experimental investigation of PCM-based thermal energy storage integrated with photovoltaic panels. 
+                        Energy Conversion and Management.
+                    </li>
+
+                    <li id="ref-zhou-2015">
+                        Zhou, D., Zhao, C.Y. and Tian, Y. (2015). 
+                        Review on thermal energy storage with phase change materials (PCMs) in building applications. 
+                        Applied Energy.
                     </li>
 
                 </ul>
