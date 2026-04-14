@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <a href="#physical-system">Physical System</a>
                 <a href="#mathematical-model">Mathematical Model</a>
                 <a href="#initial-boundary-conditions">Initial and Boundary Conditions</a>
+                <a href="#heat-generation">Heat Generation on the Photovoltaic Layer</a>
                 <a href="#atmospheric-conditions">Time-Dependent Atmospheric Conditions</a>
                 <a href="#material-properties">Thermophysical Properties</a>
                 <a href="#finite-element-method">Finite Element Method</a>
@@ -586,6 +587,95 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+            <section id="heat-generation" class="projects-section fade-in">
+                <h2>Heat Generation on the Photovoltaic Layer</h2>
+
+                <p>
+                    The photovoltaic layer is modeled as a volumetric heat source, where the incident
+                    solar irradiance is partially reflected, partially converted into electricity,
+                    and partially dissipated as heat. The resulting heat generation term \(S_{gen}\)
+                    appearing in the energy equation for the solid domain is defined as
+                    <span class="eq-ref" data-ref="eq-heat-generation"></span>.
+                </p>
+
+                <div id="eq-heat-generation" class="equation-block">
+                    <div class="equation">
+                        \[
+                        S_{gen}(t) = 
+                        \left(1 - \rho_{PV}\right) G(t)
+                        - \eta_{PV} G(t)
+                        - \alpha_{PV} G(t)
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    In this expression, \(G(t)\) represents the time-dependent solar irradiance
+                    incident on the panel. The term \(\rho_{PV}\) corresponds to the reflectance
+                    of the photovoltaic surface, accounting for the fraction of incoming radiation
+                    that is reflected and does not contribute to energy absorption. Typical values
+                    for surface reflectance and absorption properties are consistent with those
+                    reported in photovoltaic thermal studies such as Smith et al. (2014) and
+                    Khanna et al. (2018).
+                </p>
+
+                <p>
+                    The coefficient \(\alpha_{PV}\) represents the fraction of incident radiation absorbed
+                    in the upper glass layer, which accounts for radiative losses occurring before the energy reaches
+                    the active photovoltaic material. The remaining fraction of absorbed energy is
+                    partially converted into electrical power, represented by the efficiency term
+                    \(\eta_{PV}\), and partially dissipated as heat within the PV-Tedlar layer.
+                </p>
+
+                <p>
+                    The electrical conversion efficiency \(\eta_{PV}\) is temperature-dependent
+                    and is modeled using the empirical relation
+                    <span class="eq-ref" data-ref="eq-efficiency"></span>,
+                    which accounts for both thermal degradation and irradiance effects.
+                </p>
+
+                <div id="eq-efficiency" class="equation-block">
+                    <div class="equation">
+                        \[
+                        \eta_{PV}(T) = 
+                        \eta_{ref} \left[1 - \beta_{PV} (T_{PV} - T_{ref}) 
+                        + \gamma_{PV} \log \left(\frac{G(t)}{1000} \right) \right]
+                        \]
+                    </div>
+                    <div class="equation-number"></div>
+                </div>
+
+                <p>
+                    Here, \(\eta_{ref}\) denotes the nominal efficiency at the reference temperature
+                    \(T_{ref}\), typically taken as 25°C. The coefficient \(\beta_{PV}\) represents
+                    the temperature sensitivity of the photovoltaic cell, quantifying the reduction
+                    in efficiency as the operating temperature \(T_{PV}\) increases. The parameter
+                    \(\gamma_{PV}\) accounts for the dependence of efficiency on solar irradiance,
+                    introducing a correction that reflects improved performance under higher radiation levels.
+                </p>
+
+                <p>
+                    This formulation follows widely used photovoltaic energy balance models,
+                    such as those proposed by Mattei et al. (2006), and is consistent with more
+                    recent PV-PCM numerical studies, including Díaz et al. (2022).
+                </p>
+
+                <p>
+                    Typical values used in this study are \(\beta_{PV} = 0.005 \, \text{°C}^{-1}\)
+                    and \(\gamma_{PV} = 0.085\), consistent with experimentally derived correlations
+                    for crystalline silicon photovoltaic modules.
+                </p>
+
+                <p>
+                    This formulation introduces a coupled thermo-electrical feedback mechanism:
+                    as the panel temperature increases, the electrical efficiency decreases,
+                    which in turn increases the fraction of absorbed solar energy converted
+                    into heat. This effect amplifies the thermal load within the panel and
+                    directly impacts its electrical performance.
+                </p>
+
+            </section>
 
 
 
@@ -1132,6 +1222,31 @@ document.addEventListener("DOMContentLoaded", () => {
                         A Newton method with adaptive finite elements for solving phase-change problems with natural convection.
                         Journal of Computational Physics.
                     </li>
+
+                    <li id="ref-smith-2014">
+                        Smith, C., Forster, P. and Crook, R. (2014) 
+                        Global analysis of photovoltaic energy output enhanced by phase change material cooling. 
+                        Applied Energy
+                    </li>
+
+                    <li id="ref-khanna-2018">
+                        Khanna, S., Reddy, K.S. and Mallick, T.K. (2018). 
+                        Optimization of solar photovoltaic system integrated with phase change material. 
+                        Solar Energy.
+                    </li>
+
+                    <li id="ref-mattei-2006">
+                        Mattei, M., Notton, G., Cristofari, C., Muselli, M. and Poggi, P. (2006). 
+                        Calculation of the polycrystalline PV module temperature using a simple method of energy balance. 
+                        Renewable Energy.
+                    </li>
+
+                    <li id="ref-diaz-2022">
+                        Díaz, F.A., Moraga, N.O. and Cabrales, R.C. (2022). 
+                        Computational modeling of a PV-PCM passive cooling system during a day–night cycle at arid and semi-arid climate zones. 
+                        Energy Conversion and Management.
+                    </li>
+
                 </ul>
             </section>
 
