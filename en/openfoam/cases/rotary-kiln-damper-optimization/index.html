@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rotary Kiln Damper Optimization | OpenFOAM Documentation</title>
+    <meta name="description" content="OpenFOAM documentation of an industrial CFD case involving rotary kiln damper optimization, high-temperature gas-air mixing, and downstream thermal control.">
+    <meta name="keywords" content="OpenFOAM, CFD, rotary kiln, damper, gas mixing, species transport, industrial flow, thermal control, computational engineering">
+    <meta name="author" content="Thomas Allendes">
+
+    <meta property="og:title" content="Rotary Kiln Damper Optimization | OpenFOAM Documentation">
+    <meta property="og:description" content="Industrial CFD documentation of a rotary kiln damper case developed in OpenFOAM.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/openfoam/cases/rotary-kiln-damper-optimization/index.html">
+
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../../../style.css">
+
+    <meta name="theme-color" content="#ffffff">
+
+    <script>
+    window.MathJax = {
+        tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+        svg: { fontCache: 'global' }
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+    }, { threshold: 0.15 });
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="../index.html">
+                <img src="../../../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="../../../index.html">Home</a>
+            <a href="../../../projects.html" class="active">Projects</a>
+            <a href="../../../about.html">About Me</a>
+            <a href="../../../contact.html">Contact</a>
+            <a href="../../../../en/openfoam/cases/rotary-kiln-damper-optimization/index.html">EN</a>
+            <a href="../../../../es/openfoam/cases/rotary-kiln-damper-optimization/index.html">ES</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>Rotary Kiln Damper Optimization</h1>
+        <p>
+            OpenFOAM documentation of an industrial CFD case involving high-temperature gas-air mixing,
+            species transport, and downstream thermal control in a rotary kiln gas-treatment system.
+        </p>
+    </section>
+
+    <!-- DOC LAYOUT -->
+    <section class="projects-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="projects-sidebar fade-in">
+            <h3>Contents</h3>
+            <nav class="projects-toc">
+                <a href="#overview">Overview</a>
+                <a href="#engineering-context">Engineering Context</a>
+                <a href="#problem-definition">Problem Definition</a>
+                <a href="#physical-system">Physical System</a>
+                <a href="#modeling-assumptions">Modeling Assumptions</a>
+                <a href="#mathematical-model">Mathematical Model</a>
+                <a href="#thermophysical-model">Thermophysical Model</a>
+                <a href="#geometry-mesh">Geometry and Mesh</a>
+                <a href="#boundary-conditions">Boundary Conditions</a>
+                <a href="#numerical-setup">Numerical Setup</a>
+                <a href="#validation">Validation and Consistency</a>
+                <a href="#results-discussion">Results and Discussion</a>
+                <a href="#engineering-insights">Engineering Insights</a>
+                <a href="#limitations">Model Limitations</a>
+                <a href="#conclusions">Conclusions</a>
+                <a href="#references">References</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="projects-content">
+
+            <section id="overview" class="projects-section fade-in">
+                <h2>Overview</h2>
+                <p>
+                    This page documents an industrial CFD study developed in OpenFOAM to evaluate the
+                    thermal and flow behavior of a rotary kiln damper system. The case focuses on the
+                    mixing between high-temperature process gases and ambient air induced by passive suction.
+                </p>
+            </section>
+
+            <section id="engineering-context" class="projects-section fade-in">
+                <h2>Engineering Context</h2>
+                <p>
+                    The system operates under high-temperature conditions in a gas-treatment line associated
+                    with a rotary kiln. Controlling downstream temperature and pressure is essential to protect
+                    subsequent equipment and maintain stable operating conditions.
+                </p>
+            </section>
+
+            <section id="problem-definition" class="projects-section fade-in">
+                <h2>Problem Definition</h2>
+                <p>
+                    The objective of the study is to determine whether the damper configuration can induce
+                    sufficient ambient air entrainment to reduce gas temperature and achieve suitable downstream
+                    operating conditions at the measurement zone.
+                </p>
+            </section>
+
+            <section id="physical-system" class="projects-section fade-in">
+                <h2>Physical System</h2>
+                <p>
+                    The configuration consists of a duct connected to a rotary kiln, where hot gases flow
+                    through a rotating damper arrangement that generates a pressure drop and promotes air suction
+                    from the surroundings. The resulting gas-air interaction governs the thermal response of the system.
+                </p>
+            </section>
+
+            <section id="modeling-assumptions" class="projects-section fade-in">
+                <h2>Modeling Assumptions</h2>
+                <p>
+                    The flow is modeled as turbulent and compressible, with temperature-dependent properties.
+                    A species transport approach is used to describe gas-air mixing, and the case is analyzed
+                    under representative steady operating conditions.
+                </p>
+            </section>
+
+            <section id="mathematical-model" class="projects-section fade-in">
+                <h2>Mathematical Model</h2>
+                <p>
+                    The model is based on the conservation equations of mass, momentum, energy, and species.
+                    These equations describe the coupled evolution of velocity, pressure, temperature, and composition
+                    in the gas-treatment domain.
+                </p>
+            </section>
+
+            <section id="thermophysical-model" class="projects-section fade-in">
+                <h2>Thermophysical Model</h2>
+                <p>
+                    The gas mixture is described using a variable-density thermophysical model based on an ideal gas
+                    formulation. This allows density and transport properties to vary consistently with temperature,
+                    which is essential under high-temperature conditions.
+                </p>
+            </section>
+
+            <section id="geometry-mesh" class="projects-section fade-in">
+                <h2>Geometry and Mesh</h2>
+                <p>
+                    The geometry represents the main industrial features of the damper and duct system. The mesh is
+                    generated to adequately resolve the mixing region, the damper zone, and areas where large gradients
+                    of temperature, velocity, and species concentration are expected.
+                </p>
+            </section>
+
+            <section id="boundary-conditions" class="projects-section fade-in">
+                <h2>Boundary Conditions</h2>
+                <p>
+                    Boundary conditions are defined to represent the inlet of hot kiln gases, passive air entrainment,
+                    outlet pressure behavior, and wall interactions. Temperature and species composition are prescribed
+                    to reproduce realistic plant conditions.
+                </p>
+            </section>
+
+            <section id="numerical-setup" class="projects-section fade-in">
+                <h2>Numerical Setup</h2>
+                <p>
+                    The problem is solved in OpenFOAM using a finite volume formulation with turbulence modeling,
+                    appropriate discretization schemes, and a convergence strategy selected to ensure stable and
+                    physically consistent solutions.
+                </p>
+            </section>
+
+            <section id="validation" class="projects-section fade-in">
+                <h2>Validation and Consistency</h2>
+                <p>
+                    The model is assessed through engineering consistency, including mass and thermal balance checks,
+                    expected mixing trends, and agreement with physically reasonable downstream pressure and temperature
+                    behavior.
+                </p>
+            </section>
+
+            <section id="results-discussion" class="projects-section fade-in">
+                <h2>Results and Discussion</h2>
+                <p>
+                    The results provide insight into the temperature distribution, pressure evolution, gas-air mixing,
+                    and flow structure inside the system. Special attention is given to the damper’s effect on downstream
+                    thermal conditioning.
+                </p>
+            </section>
+
+            <section id="engineering-insights" class="projects-section fade-in">
+                <h2>Engineering Insights</h2>
+                <p>
+                    The analysis highlights the mechanisms that control passive air suction, thermal reduction,
+                    and overall system performance. These findings support engineering decisions related to damper
+                    design and plant operation.
+                </p>
+            </section>
+
+            <section id="limitations" class="projects-section fade-in">
+                <h2>Model Limitations</h2>
+                <p>
+                    The model includes simplifying assumptions such as steady-state operation and turbulence closure,
+                    which may limit its ability to capture all transient or highly complex flow features. Even so,
+                    it captures the dominant mechanisms relevant to engineering assessment.
+                </p>
+            </section>
+
+            <section id="conclusions" class="projects-section fade-in">
+                <h2>Conclusions</h2>
+                <p>
+                    This case shows how CFD can be used to analyze and improve the thermal and hydraulic behavior
+                    of an industrial gas-treatment system, providing useful criteria for design evaluation and
+                    operational decision-making.
+                </p>
+            </section>
+
+            <section id="references" class="projects-section fade-in">
+                <h2>References</h2>
+                <p>
+                    References for this case will include the main industrial and modeling sources used to define
+                    the physical assumptions, numerical setup, and engineering interpretation.
+                </p>
+            </section>
+
+        </main>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section fade-in">
+        <h2>Interested in this case?</h2>
+        <p>You can return to the OpenFOAM documentation index or get in touch through the contact page.</p>
+        <a href="../../../contact.html" class="cta-button">Contact</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-col">
+                <img src="../../../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
+                <p class="footer-brand">Allendes Computational Engineering</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="../../../index.html">Home</a>
+                <a href="../../../projects.html">Projects</a>
+                <a href="../../../about.html">About Me</a>
+                <a href="../../../contact.html">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Santiago, Chile</p>
+                <p>your.email@example.com</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../../images/linkedin.svg" alt="LinkedIn">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Allendes Computational Engineering</p>
+        </div>
+    </footer>
+
+</body>
+</html>
