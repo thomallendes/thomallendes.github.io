@@ -1,0 +1,272 @@
+                <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Battery Cooling with PCM | FreeFEM Documentation</title>
+    <meta name="description" content="FreeFEM documentation of a finite element case involving battery cooling with phase change material.">
+    <meta name="keywords" content="FreeFEM, finite element, battery cooling, phase change material, thermal analysis">
+    <meta name="author" content="Thomas Allendes">
+
+    <meta property="og:title" content="Battery Cooling with PCM | FreeFEM Documentation">
+    <meta property="og:description" content="Finite element documentation of a battery cooling case using phase change material in FreeFEM.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="../../images/og-image.png">
+    <meta property="og:url" content="https://thomallendes.github.io/en/freefem/cases/battery-cooling-pcm/index.html">
+
+    <link rel="icon" type="image/png" href="../../images/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../../../style.css">
+
+    <meta name="theme-color" content="#ffffff">
+
+    <script>
+    window.MathJax = {
+        tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+        svg: { fontCache: 'global' }
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+    }, { threshold: 0.15 });
+    elements.forEach(el => observer.observe(el));
+});
+</script>
+
+<body>
+
+    <!-- NAV -->
+    <header class="nav">
+        <div class="nav-logo">
+            <a href="../index.html">
+                <img src="../../../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="logo-img">
+            </a>
+        </div>
+
+        <nav class="nav-links">
+            <a href="../../../index.html">Home</a>
+            <a href="../../../projects.html" class="active">Projects</a>
+            <a href="../../../about.html">About Me</a>
+            <a href="../../../contact.html">Contact</a>
+            <a href="../../../../en/freefem/cases/battery-cooling-pcm/index.html">EN</a>
+            <a href="../../../../es/freefem/cases/battery-cooling-pcm/index.html">ES</a>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero hero-small fade-in">
+        <h1>Battery Cooling with PCM</h1>
+        <p>
+            FreeFEM documentation of a finite element case involving battery cooling with phase change material.
+        </p>
+    </section>
+
+    <!-- DOC LAYOUT -->
+    <section class="projects-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="projects-sidebar fade-in">
+            <h3>Contents</h3>
+            <nav class="projects-toc">
+                <a href="#overview">Overview</a>
+                <a href="#engineering-context">Engineering Context</a>
+                <a href="#problem-definition">Problem Definition</a>
+                <a href="#physical-system">Physical System</a>
+                <a href="#modeling-assumptions">Modeling Assumptions</a>
+                <a href="#mathematical-model">Mathematical Model</a>
+                <a href="#thermophysical-model">Thermophysical Model</a>
+                <a href="#geometry-mesh">Geometry and Mesh</a>
+                <a href="#boundary-conditions">Boundary Conditions</a>
+                <a href="#numerical-setup">Numerical Setup</a>
+                <a href="#validation">Validation and Consistency</a>
+                <a href="#results-discussion">Results and Discussion</a>
+                <a href="#engineering-insights">Engineering Insights</a>
+                <a href="#limitations">Model Limitations</a>
+                <a href="#conclusions">Conclusions</a>
+                <a href="#references">References</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="projects-content">
+
+            <section id="overview" class="projects-section fade-in">
+                <h2>Overview</h2>
+                <p>
+                    This page documents a finite element study developed in FreeFEM to evaluate the
+                    thermal behavior of a lithium-ion battery cooled by a phase change material. The case focuses on the
+                    heat transfer characteristics and numerical efficiency of the cooling system.
+                </p>
+            </section>
+
+            <section id="engineering-context" class="projects-section fade-in">
+                <h2>Engineering Context</h2>
+                <p>
+                    The system operates under high-temperature conditions in a battery management system. Controlling the battery temperature is essential to ensure safety, performance, and longevity.
+                </p>
+            </section>
+
+            <section id="problem-definition" class="projects-section fade-in">
+                <h2>Problem Definition</h2>
+                <p>
+                    The problem consists of modeling the transient thermal response of a lithium-ion battery
+                    subjected to internal heat generation and cooled by a surrounding phase change material. The goal is to analyze the temperature distribution, phase change behavior, and overall cooling performance.
+                </p>
+            </section>
+
+            <section id="physical-system" class="projects-section fade-in">
+                <h2>Physical System</h2>
+                <p>
+                    The physical system includes a cylindrical lithium-ion battery cell surrounded by a layer of phase change material. The battery generates heat during operation, which is absorbed by the PCM as it undergoes a phase change, thus regulating the battery temperature.
+                </p>
+            </section>
+
+            <section id="modeling-assumptions" class="projects-section fade-in">
+                <h2>Modeling Assumptions</h2>
+                <p>
+                    The model assumes axisymmetric geometry, uniform internal heat generation in the battery, and a single-phase change temperature for the PCM. The thermal properties of the materials are considered temperature-dependent, and natural convection effects within the PCM are neglected for simplicity.
+                </p>
+            </section>
+
+            <section id="mathematical-model" class="projects-section fade-in">
+                <h2>Mathematical Model</h2>
+                <p>
+                    The mathematical model consists of the transient heat conduction equation for both the battery and the PCM, coupled through a phase change term that accounts for the latent heat during the phase transition. The equations are solved using a finite element method implemented in FreeFEM.
+                </p>
+            </section>
+
+            <section id="thermophysical-model" class="projects-section fade-in">
+                <h2>Thermophysical Model</h2>
+                <p>
+                    The thermophysical model includes temperature-dependent thermal conductivity, specific heat capacity, and density for both the battery and the PCM. The phase change process is modeled using an enthalpy method, which allows for the capture of the latent heat effects during melting and solidification.
+                </p>
+            </section>
+
+            <section id="geometry-mesh" class="projects-section fade-in">
+                <h2>Geometry and Mesh</h2>
+                <p>
+                    The geometry consists of a cylindrical battery with a surrounding annular region of PCM. The mesh is generated using a structured grid with finer resolution near the battery-PCM interface to accurately capture the temperature gradients and phase change behavior.
+                </p>
+            </section>
+
+            <section id="boundary-conditions" class="projects-section fade-in">
+                <h2>Boundary Conditions</h2>
+                <p>
+                    The boundary conditions include a specified internal heat generation rate within the battery, an initial temperature distribution, and insulated boundaries at the outer edges of the PCM. The model also includes a convective boundary condition at the battery surface to account for any external cooling effects.
+                </p>
+            </section>
+
+            <section id="numerical-setup" class="projects-section fade-in">
+                <h2>Numerical Setup</h2>
+                <p>
+                    The numerical solution is obtained using an implicit time-stepping scheme for stability, with a non-linear solver to handle the phase change behavior. The simulation is run until a steady-state temperature distribution is reached, and the results are analyzed to evaluate the cooling performance of the PCM.
+                </p>
+            </section>
+
+            <section id="validation" class="projects-section fade-in">
+                <h2>Validation and Consistency</h2>
+                <p>
+                    The model is validated against analytical solutions for simplified cases and compared with experimental data from literature to ensure that the temperature predictions and phase change behavior are accurately captured.
+                </p>
+            </section>
+
+            <section id="results-discussion" class="projects-section fade-in">
+                <h2>Results and Discussion</h2>
+                <p>
+                    The results show the transient temperature distribution within the battery and the PCM, highlighting the effectiveness of the PCM in regulating the battery temperature. The discussion focuses on the influence of material properties, phase change characteristics, and cooling performance under different operating conditions.
+                </p>
+            </section>
+
+            <section id="engineering-insights" class="projects-section fade-in">
+                <h2>Engineering Insights</h2>
+                <p>
+                    The case provides insights into the design and optimization of battery cooling systems using phase change materials, emphasizing the importance of material selection, geometry, and thermal management strategies to enhance battery safety and performance.
+                </p>
+            </section>
+
+            <section id="limitations" class="projects-section fade-in">
+                <h2>Model Limitations</h2>
+                <p>
+                    The model has limitations due to the assumptions made, such as neglecting natural convection within the PCM and assuming a single-phase change temperature. Future work could include more complex geometries, multi-phase change materials, and the incorporation of convective effects for a more comprehensive analysis.
+                </p>
+            </section>
+
+            <section id="conclusions" class="projects-section fade-in">
+                <h2>Conclusions</h2>
+                <p>
+                    The study demonstrates the capability of FreeFEM to model complex thermal systems involving phase change materials for battery cooling applications. The results highlight the potential of PCM-based cooling strategies to enhance battery performance and safety, while also providing a framework for further research and development in this area.
+                </p>
+            </section>
+
+            <section id="references" class="projects-section fade-in">
+                <h2>References</h2>
+                <p>
+                    A list of references to relevant literature, experimental data, and analytical solutions used for model validation and comparison.
+                </p>
+            </section>
+
+        </main>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section fade-in">
+        <h2>Interested in this case?</h2>
+        <p>You can return to the FreeFEM documentation index or get in touch through the contact page.</p>
+        <a href="../../../contact.html" class="cta-button">Contact</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+
+            <div class="footer-col">
+                <img src="../../../../images/logo_TAM.png" alt="Allendes Computational Engineering logo" class="footer-logo">
+                <p class="footer-brand">Allendes Computational Engineering</p>
+                <p class="footer-tagline">Physics-based modeling for engineering decision-making.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="../../../index.html">Home</a>
+                <a href="../../../projects.html">Projects</a>
+                <a href="../../../about.html">About Me</a>
+                <a href="../../../contact.html">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Santiago, Chile</p>
+                <p>your.email@example.com</p>
+
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn">
+                        <img src="../../images/linkedin.svg" alt="LinkedIn">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Allendes Computational Engineering</p>
+        </div>
+    </footer>
+
+</body>
+</html>
+                
+                
+                
